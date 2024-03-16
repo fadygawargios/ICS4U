@@ -327,30 +327,60 @@ def print_ascii_art(screen):
   y = 1  # Start from the second row (avoiding the top line)
   x = 5   # Adjust this for desired horizontal centering
 
-  # Define the ASCII art lines
   art_lines = [
-      "    /~~~~~~\\",
-      "   /'  -s- ~~~~\\",
-      "   /'dHHb   ~~~~",
-      "  /'dHHHA   :",
-      "  /' VHHHHaadHHb:",
-      "  /'  `VHHHHHHHHb:",
-      "  /'   `VHHHHHHH:",
-      " /    dHHHHHHH:",
-      " |    dHHHHHHHH:",
-      " |    dHHHHHHHH:",
-      " |    VHHHHHHHHH:",
-      " |  b  HHHHHHHHV:",
-      " |  Hb  HHHHHHHV'",
-      " |  HH dHHHHHHV'",
-      " |  VHbdHHHHHHV'",
-      " |  VHHHHHHHV'",
-      "  \  VHHHHHHH:",
-      "  \oodboooooodH",
-      "HHHHHHHHHHHHHHHHHHHHHHHHGGN94"
+      "",
+      "                 .88888888:.",
+      "                88888888.88888.",
+      "              .8888888888888888.",
+      "              888888888888888888",
+      "              88' _`88'_  `88888",
+      "              88 88 88 88  88888",
+      "              88_88_::_88_:88888",
+      "              88:::,::,:::::8888",
+      "              88`:::::::::'`8888",
+      "             .88  `::::'    8:88.",
+      "            8888            `8:888.",
+      "          .8888'             `888888.",
+      "         .8888:..  .::.  ...:'8888888:.",
+      "        .8888.'     :'     `'::`88:88888",
+      "       .8888        '         `.888:8888.",
+      "      888:8         .           888:88888",
+      "    .888:88        .:           888:88888: ",
+      "    8888888.       ::           88:888888",
+      "    `.::.888.      ::          .88888888",
+      "   .::::::.888.    ::         :::`8888'.:.",
+      "  ::::::::::.888   '         .::::::::::::",
+      "  ::::::::::::.8    '      .:8::::::::::::.",
+      " .::::::::::::::.        .:888:::::::::::::",
+      " :::::::::::::::88:.__..:88888:::::::::::'",
+      "  `'.:::::::::::88888888888.88:::::::::'",
+      "      `':::_:' -- '' -'-' `':_::::'`",
+      " "
   ]
 
   # Print each line of art with increasing y-value
   for line in art_lines:
     screen.addstr(y, x, line)
     y += 1
+
+def VérifieRéponse(réponse, bonne_réponse, écran_retroaction):
+  WHITE_AND_RED = curses.color_pair(2)
+  WHITE_AND_GREEN = curses.color_pair(3)
+ # Si la réponse de l'utilisateur est la bonne réponse
+  if réponse == bonne_réponse:
+
+    # Imprime la rétroaction sur le window «écran_retroaction»
+    écran_retroaction.clear()
+    écran_retroaction.addstr(f"Bonne Réponse! Bravo!", WHITE_AND_GREEN | curses.A_BOLD)
+    écran_retroaction.refresh()
+    
+    return True
+
+  else:
+
+    # Imprime la rétroaction sur le window «écran_retroaction»
+    écran_retroaction.clear()
+    écran_retroaction.addstr(f"Mauvaise Réponse! La réponse était {bonne_réponse}.", WHITE_AND_RED | curses.A_BOLD)
+    écran_retroaction.refresh()
+
+    return False

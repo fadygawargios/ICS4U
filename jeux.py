@@ -6,15 +6,13 @@
 from common import * 
 from PIL import Image
 from random import randint
-from fonctions import PoseMultiple, FermeImage, ObtenirOptions, listeHasard, formatList, PoseText, mergeSort, print_ascii_art
+from fonctions import PoseMultiple, FermeImage, ObtenirOptions, listeHasard, formatList, PoseText, mergeSort, print_ascii_art, VérifieRéponse
 import time
 import curses
 
 
 # todo: POP ALREADY SEEN QUESTIONS FROM THE LIST OF CARTES AND DREAPEAUX (to avoid repeats)
 def ÉnigmeNationale(stdscr, objectif, écran_retroaction):
-  WHITE_AND_RED = curses.color_pair(2)
-  WHITE_AND_GREEN = curses.color_pair(3)
 
   stdscr.nodelay(False)
   stdscr.clear()
@@ -59,29 +57,16 @@ def ÉnigmeNationale(stdscr, objectif, écran_retroaction):
     # Ferme l'image (pour qu'ils ne s'accumulent pas)
     FermeImage()
 
-
-    # Si la réponse de l'utilisateur est la bonne réponse
-    if réponse == options[index_bonne_réponse]:
-      # Ajoute un point
-      points += 1 
-
-      # Imprime la rétroaction sur le window «écran_retroaction»
-      écran_retroaction.clear()
-      écran_retroaction.addstr(f"Bonne Réponse! Bravo!", WHITE_AND_GREEN | curses.A_BOLD)
-      écran_retroaction.refresh()
-
-    else:
-      # Si l'utulisateur n'est pas à 0 points
-      if points != 0:
-        # Enleve un point
-        points -= 1
+    # todo: add comments
+    résultat = VérifieRéponse(réponse, options[index_bonne_réponse], écran_retroaction)
+    
+    if résultat == False:
       erreurs += 1
-      
-      # Imprime la rétroaction sur le window «écran_retroaction»
-      écran_retroaction.clear()
-      écran_retroaction.addstr(f"Mauvaise Réponse! La réponse était {options[index_bonne_réponse]}.", WHITE_AND_RED | curses.A_BOLD)
-      écran_retroaction.refresh()
-  
+
+      if points != 0:
+        points -= 1
+    else:
+      points += 1
     # Affiche les changements de points
     écran_retroaction.addstr(1, 0, f"Points: {points}")
     écran_retroaction.refresh()
@@ -92,20 +77,26 @@ def ÉnigmeNationale(stdscr, objectif, écran_retroaction):
 
 def PingouinsDuTri(stdscr, objectif, écran_retroaction):
 
+  stdscr.nodelay(False)
+  WHITE_AND_YELLOW = curses.color_pair(1)
+
   stdscr.clear()
-  stdscr.addstr("Salut ..., vous allez jouer à ....")
+  stdscr.addstr(5, 50, "Salut ..., vous allez jouer à ")
+  stdscr.addstr(5, 80, "PINGOINS DU TRI", WHITE_AND_YELLOW)
+  print_ascii_art(stdscr)
   stdscr.refresh()
   stdscr.getch()
+
   liste_nonTriée = listeHasard(longeur=5, min=0, max=10)
   stdscr.clear()
   question = "Met la suite de nombre suivante en ordre croissant: " + formatList(liste_nonTriée)
   réponse = PoseText(stdscr, question)
-  # note there is always an extra item thats just an empty string
-  stdscr.addstr(5, 0, str(réponse))
   liste_triée = mergeSort(liste_nonTriée)
+
+  résultat = VérifieRéponse(str(réponse[0]).split(","), liste_triée, écran_retroaction)
+  stdscr.addstr(5, 0, f"{résultat} : {réponse[0]}")
   stdscr.refresh()
   time.sleep(5)
   stdscr.clear()
-  print_ascii_art(stdscr)
   stdscr.refresh()
   time.sleep(5)
