@@ -11,7 +11,8 @@ DIFFICULTÉS = ["Facile", "Moyenne", "Difficile"]
 # Définit la constante du touche ENTER en ASCII
 ENTER = 10
 
-# TODO: LES FONCTIONS DOIVENT UTULISER LA MEME NOTATION (camelCase ou snake_case)
+
+# todo: **LES FONCTIONS DOIVENT UTULISER LA MEME NOTATION (camelCase ou snake_case)
 
 # Fonction qui crée des options, un sous-liste aléatoire d'une liste passée
 def ObtenirOptions(list):
@@ -79,12 +80,9 @@ def FichierVersNom(file):
 # stdscr -> "standard screen"
 # Fonction appelée par main() pour imprimer l'introduction et commencer le jeu
 def Démarrage(stdscr):
+  WHITE_AND_YELLOW = curses.color_pair(1)
   # Assure qu'il y aura un délai jusqu'à l'utulisateur appuie un bouton
   stdscr.nodelay(False)
-
-  # Intialise une paire de couleur (id = 1) avec un coleur de texte bleu et un coleur d'arriére plan jaune
-  curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_YELLOW)
-  BLANC_ET_JAUNE = curses.color_pair(1)
 
   # Enleve le curseur de l'utulisateur
   curses.curs_set(0)
@@ -92,8 +90,9 @@ def Démarrage(stdscr):
   # Enleve tout sur l'écran standard avant d'imprimer les messages d'introduction
   # Paramètres: stdscr.addstr(position_y, position_x, "str du message", attribue_1 | attribue_2)
   stdscr.clear()
-  stdscr.addstr(1, 0, "Bienvenu aux jeux éducatives :)", BLANC_ET_JAUNE | curses.A_BOLD)
-  # TODO: FIX THIS...
+  stdscr.addstr(1, 0, "Bienvenu aux jeux éducatives :)", WHITE_AND_YELLOW | curses.A_BOLD)
+  # todo: work on prompts and explanations
+  
   stdscr.addstr(2, 0, "Selon votre année scolaire, vous allez étre assigner un jeux...")
   stdscr.addstr(3, 0, "Cliquez sur n'importe quelle bouton pour commencer!")
   stdscr.refresh()
@@ -125,7 +124,11 @@ def Démarrage(stdscr):
   return DIFFICULTÉS.index(difficulté), int(année)
 
 # Fonction appelée par main() pour imprimer la conclusion et finir le jeu
-def ÉcranFin(stdscr, erreurs, color):
+def ÉcranFin(stdscr, erreurs):
+  
+  WHITE_AND_YELLOW = curses.color_pair(1)
+  WHITE_AND_GREEN = curses.color_pair(3)
+
   # Assure qu'il y aura un délai jusqu'à l'utulisateur appuie un bouton
   stdscr.nodelay(False)
 
@@ -133,12 +136,13 @@ def ÉcranFin(stdscr, erreurs, color):
   stdscr.clear()
 
   # Imprime la conclusion à travers 3 lignes
-  stdscr.addstr("BRAVO!! VOUS AVEZ GAGNER!!", color)
+  stdscr.addstr("BRAVO!! VOUS AVEZ GAGNER!!", WHITE_AND_GREEN)
   stdscr.addstr(1,0, f"Vous avez faite {erreurs} erreurs.")
   stdscr.addstr(2,0,  "Pour fermer le jeu, appuyer")
   stdscr.addstr(2, 28, "ENTER", curses.A_STANDOUT)
-  stdscr.addstr(3, 0, "Merci d'avoir jouer Énigme Nationale :)", curses.color_pair(1))
-  
+  stdscr.addstr(3, 0, "Merci d'avoir jouer Énigme Nationale :)", WHITE_AND_YELLOW)
+
+
   # Affiche la conclusion
   stdscr.refresh()
 
@@ -148,15 +152,14 @@ def ÉcranFin(stdscr, erreurs, color):
 
 # Fonction qui affiche les options et permette le selectionnement
 def ListeQuestions(écran_questions, ligne_sélectionnée, options):
-  # Définit le pair (id = 1) comme BLANC_ET_JAUNE
-  BLANC_ET_JAUNE = curses.color_pair(1)
+  WHITE_AND_YELLOW = curses.color_pair(1)
 
   # Pour chaque question dans option
   for indice_question in range(len(options)):
   # Si la question est séléctionné
     if ligne_sélectionnée == indice_question:
       # Écrit le en couleur sur une différent ligne (celui qui correspon à indice question)
-      écran_questions.addstr(indice_question, 0, f"{indice_question + 1}.{options[indice_question]}", BLANC_ET_JAUNE)
+      écran_questions.addstr(indice_question, 0, f"{indice_question + 1}.{options[indice_question]}", WHITE_AND_YELLOW)
   
     # Sinon imprime le sans couleur
     else:
@@ -223,6 +226,7 @@ def PoseMultiple(stdscr, options, question):
   # Retourne l'option sélectionné quand l'utulisateur à cliqué ENTER
   return options[ligne_sélectionnée]
 
+# todo: fix having to click enter several times
 # Fonction qui pose l'utulisateur pour so nom et année d'étude
 def PoseText(écran, question):
   # Donne le curseur au utulisateur
@@ -253,19 +257,21 @@ def PoseText(écran, question):
 
   # Prend l'info du endroite_texte
   infos = endroit_texte.gather()
-  # TODO: add comments
+  # todo: add comments
   info_list = infos.split(" ")
 
   # Retourne les informations
   return info_list
 
 
+# todo: add comments
 def listeHasard(longeur, min, max): 
   liste = []
   for i in range(longeur):
     liste.append(randint(min, max))
   return liste
 
+# todo: add comments
 def mergeSort(list):
   if len(list) <= 1:
     return list
@@ -315,3 +321,36 @@ def formatList(liste):
       liste_formatted = liste_formatted + str(liste[i])
 
   return liste_formatted
+
+def print_ascii_art(screen):
+  # Define starting position (y, x)
+  y = 1  # Start from the second row (avoiding the top line)
+  x = 5   # Adjust this for desired horizontal centering
+
+  # Define the ASCII art lines
+  art_lines = [
+      "    /~~~~~~\\",
+      "   /'  -s- ~~~~\\",
+      "   /'dHHb   ~~~~",
+      "  /'dHHHA   :",
+      "  /' VHHHHaadHHb:",
+      "  /'  `VHHHHHHHHb:",
+      "  /'   `VHHHHHHH:",
+      " /    dHHHHHHH:",
+      " |    dHHHHHHHH:",
+      " |    dHHHHHHHH:",
+      " |    VHHHHHHHHH:",
+      " |  b  HHHHHHHHV:",
+      " |  Hb  HHHHHHHV'",
+      " |  HH dHHHHHHV'",
+      " |  VHbdHHHHHHV'",
+      " |  VHHHHHHHV'",
+      "  \  VHHHHHHH:",
+      "  \oodboooooodH",
+      "HHHHHHHHHHHHHHHHHHHHHHHHGGN94"
+  ]
+
+  # Print each line of art with increasing y-value
+  for line in art_lines:
+    screen.addstr(y, x, line)
+    y += 1

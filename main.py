@@ -18,14 +18,14 @@ from jeux import ÉnigmeNationale, PingouinsDuTri
 from common import * 
 # stdscr -> «Standard Screen» que Curses va afficher au dessus du line de commande
 def main(stdscr):
+  
+  # todo: make these french
 
   # Crée des paires de couleurs pour la ligne de commande
   # Paramètres: curses.init_pair(id, curses.COULEUR_TEXTE, curses.COULEUR_ARRIERE_PLAN)
+  curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_YELLOW)
   curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_RED)
   curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_GREEN)
-  WHITE_AND_RED = curses.color_pair(2)
-  WHITE_AND_GREEN = curses.color_pair(3)
-  
 
   # Appelle la fonction de démarrage pour choisir la difficulté
   difficulté, année = Démarrage(stdscr)
@@ -48,11 +48,11 @@ def main(stdscr):
   elif année in [3, 4]:
     erreurs = ÉnigmeNationale(stdscr, objectif, écran_retroaction)
   else:
-    # TODO: explain to the user that they have to be between grades 1 and 4 to have games and end program
+    # todo: explain to the user that they have to be between grades 1 and 4 to have games and end program
     erreurs = 0
   
   # Affiche l'écran de fin
-  ÉcranFin(stdscr, erreurs, WHITE_AND_GREEN)
+  ÉcranFin(stdscr, erreurs)
 
 
 # Exécute la fonction principale avec Curses

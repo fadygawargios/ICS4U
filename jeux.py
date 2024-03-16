@@ -6,16 +6,16 @@
 from common import * 
 from PIL import Image
 from random import randint
-from fonctions import PoseMultiple, FermeImage, ObtenirOptions, listeHasard, formatList, PoseText, mergeSort
+from fonctions import PoseMultiple, FermeImage, ObtenirOptions, listeHasard, formatList, PoseText, mergeSort, print_ascii_art
 import time
+import curses
 
 
-# TODO: POP ALREADY SEEN QUESTIONS FROM THE LIST OF CARTES AND DREAPEAUX (to avoid repeats)
+# todo: POP ALREADY SEEN QUESTIONS FROM THE LIST OF CARTES AND DREAPEAUX (to avoid repeats)
 def ÉnigmeNationale(stdscr, objectif, écran_retroaction):
-  # TODO: FIND A SPOT TO PUT THIS
   WHITE_AND_RED = curses.color_pair(2)
   WHITE_AND_GREEN = curses.color_pair(3)
-  
+
   stdscr.nodelay(False)
   stdscr.clear()
   stdscr.addstr(1, 0, "Vous allez jouer Énigme Nationale!!")
@@ -98,8 +98,14 @@ def PingouinsDuTri(stdscr, objectif, écran_retroaction):
   stdscr.getch()
   liste_nonTriée = listeHasard(longeur=5, min=0, max=10)
   stdscr.clear()
-  # TODO: Function to format str
   question = "Met la suite de nombre suivante en ordre croissant: " + formatList(liste_nonTriée)
   réponse = PoseText(stdscr, question)
+  # note there is always an extra item thats just an empty string
+  stdscr.addstr(5, 0, str(réponse))
   liste_triée = mergeSort(liste_nonTriée)
   stdscr.refresh()
+  time.sleep(5)
+  stdscr.clear()
+  print_ascii_art(stdscr)
+  stdscr.refresh()
+  time.sleep(5)
