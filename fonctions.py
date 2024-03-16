@@ -1,0 +1,262 @@
+import pycountry
+from deep_translator import GoogleTranslator
+import curses
+from curses.textpad import Textbox, rectangle
+import pygetwindow as gw
+from random import randint
+
+# Définit la constante des trois difficultés possibles
+DIFFICULTÉS = ["Facile", "Moyenne", "Difficile"]
+
+# Définit la constante du touche ENTER en ASCII
+ENTER = 10
+
+# Fonction qui crée des options, un sous-liste aléatoire d'une liste passée
+def ObtenirOptions(list):
+
+  # Définit la longeur de la liste - 1 pour la génération de nombres aléatoires
+  longueur = len(list) - 1
+  
+  # Définit les listes pour contenir les options et les noms de ffichiers respectifs
+  options = []
+  options_nom_fichiers = []
+
+  # Définit une liste pour contenir les nombres aléatoires pour éviter les doublons
+  nombres_aleatoires = []
+
+  # Creation de 3 options:
+  for i in range(3):
+    # Génére un nombre aléatoire entre 0 et la longeur de la liste
+    nombres_aleatoire = randint(0, longueur)
+    # Trouve le nom d'un fichier aléatoire (ce qui correspond à l'index de nombres_aléatoires) 
+    fichier_aleatoire = list[nombres_aleatoire]
+    # Transforme le nom du ficher en nom de pays
+    counry_name = FichierVersNom(fichier_aleatoire)
+
+    # Si le nombre_aléatoire était déja obtenu
+    if nombres_aleatoire in nombres_aleatoires:
+      # Cherche un nouveau
+      nombres_aleatoire = randint(0, longueur)
+    
+    # Ajoute le nombre_aléatoire qu'on vient de voir dans la liste
+    nombres_aleatoires.append(nombres_aleatoire)
+    # Ajoute le nom du pays dans options et le noms du fichier correspondantes dans options_nom_fichiers
+    options.append(counry_name)
+    options_nom_fichiers.append(fichier_aleatoire)
+
+  # Retourne les options, leurs nom de fichiers et une int aléatoire comme index de la bonne réponse du liste options
+  return options, options_nom_fichiers, randint(0, len(options) - 1)
+
+    
+# Fonction qui ferme le fenetre d'image ouverte
+def FermeImage():
+  # Pour chaque fenetre "Photos" (celui qui l'ouvre l'image sur Windows)
+  for fenetre in gw.getWindowsWithTitle(f"Photos"):
+    # Ferme le
+    fenetre.close()
+
+# Fonction qui prend le nom d'un fichier et retourne le nom du pays
+def FichierVersNom(file):
+  # *Sachez que les fichiers sont nommés avec le code du pays et l'extension .jpg (ex: ca.jpg pour Canada)
+
+  # Enleve l'extension
+  code = file.split(".jpg", 1)[0]
+  # Cherche l'info du pays en anglais avec le code
+  info_pays_en = pycountry.countries.get(alpha_2=code)
+  # Sort seulement le nom de tout l'information disponible
+  nom_pays_en = str(dict(info_pays_en)["name"])
+  # Traduit le nom du pays en francais pour l'utulisateur
+  nom_pays_fr = GoogleTranslator(source='auto', target='fr').translate(nom_pays_en)
+  # Enleve des info inutile du nom
+  nom_pays_fr = nom_pays_fr.split(",", 1)[0]
+  nom_pays_fr = nom_pays_fr.split("(", 1)[0]
+
+  # Retourne le nom en francais
+  return nom_pays_fr
+
+# stdscr -> "standard screen"
+# Fonction appelée par main() pour imprimer l'introduction et commencer le jeu
+def Démarrage(stdscr):
+  # Assure qu'il y aura un délai jusqu'à l'utulisateur appuie un bouton
+  stdscr.nodelay(False)
+
+  # Intialise une paire de couleur (id = 1) avec un coleur de texte bleu et un coleur d'arriére plan jaune
+  curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_YELLOW)
+  BLANC_ET_JAUNE = curses.color_pair(1)
+
+  # Enleve le curseur de l'utulisateur
+  curses.curs_set(0)
+
+  # Enleve tout sur l'écran standard avant d'imprimer les messages d'introduction
+  # Paramètres: stdscr.addstr(position_y, position_x, "str du message", attribue_1 | attribue_2)
+  stdscr.clear()
+  stdscr.addstr(1, 0, "Bienvenu à Énigme Nationale :)", BLANC_ET_JAUNE | curses.A_BOLD)
+  stdscr.addstr(2, 0, "Dans ce jeu, vous allez devoir identifier le nom d'un pays à partir d'un drapeau ou d'une carte mondiale.")
+  stdscr.addstr(3, 0, "Cliquez sur n'importe quelle bouton pour commencer!")
+  stdscr.refresh()
+  stdscr.getch()
+  stdscr.clear()
+
+  # Demande l'utulisateur pour son nom
+  écran_info = curses.newwin(6, 105, 0, 0)
+  nom, année = PoseInfo(écran_info, "Veuillez écrire votre prénom et votre année séparer par une espace:")
+  stdscr.addstr(0, 0, f"Salut {nom}")
+
+  stdscr.addstr(2, 0, "SVP cliquer un bouton pour choisir une difficulté")
+  stdscr.addstr(3, 0, "En mode facile vous aurez besoin de 5 points, en mode moyenne, 10 points et mode difficile, 15 points pour gagner!")
+  stdscr.addstr(5, 0, "ATTENTION:", curses.A_STANDOUT)
+  stdscr.addstr(5, 11, " Vous perdez des points si vous répondez mal! Bonne chance!")
+  # Fait un refresh à l'écrain pour afficher les changements
+  stdscr.refresh()
+
+  # Attend pour n'importe quelle clique de boutton
+  stdscr.getch()
+
+  # Demande l'utulisateur à quelle difficulté il aimerait jouer
+  question = "Choisir une difficulté:"
+  difficulté = PoseQuestion(stdscr, DIFFICULTÉS, question)
+  
+  # Retourne l'index du difficulté choisi
+  return DIFFICULTÉS.index(difficulté), int(année)
+
+# Fonction appelée par main() pour imprimer la conclusion et finir le jeu
+def ÉcranFin(stdscr, erreurs, color):
+  # Assure qu'il y aura un délai jusqu'à l'utulisateur appuie un bouton
+  stdscr.nodelay(False)
+
+  # Enleve les question en effacant l'écain
+  stdscr.clear()
+
+  # Imprime la conclusion à travers 3 lignes
+  stdscr.addstr("BRAVO!! VOUS AVEZ GAGNER!!", color)
+  stdscr.addstr(1,0, f"Vous avez faite {erreurs} erreurs.")
+  stdscr.addstr(2,0,  "Pour fermer le jeu, appuyer")
+  stdscr.addstr(2, 28, "ENTER", curses.A_STANDOUT)
+  stdscr.addstr(3, 0, "Merci d'avoir jouer Énigme Nationale :)", curses.color_pair(1))
+  
+  # Affiche la conclusion
+  stdscr.refresh()
+
+  # Attend l'utulisateur d'appuyer un boutton afin de retourner ce qui fini le jeu
+  stdscr.getch()
+
+
+# Fonction qui affiche les options et permette le selectionnement
+def ListeQuestions(écran_questions, ligne_sélectionnée, options):
+  # Définit le pair (id = 1) comme BLANC_ET_JAUNE
+  BLANC_ET_JAUNE = curses.color_pair(1)
+
+  # Pour chaque question dans option
+  for indice_question in range(len(options)):
+  # Si la question est séléctionné
+    if ligne_sélectionnée == indice_question:
+      # Écrit le en couleur sur une différent ligne (celui qui correspon à indice question)
+      écran_questions.addstr(indice_question, 0, f"{indice_question + 1}.{options[indice_question]}", BLANC_ET_JAUNE)
+  
+    # Sinon imprime le sans couleur
+    else:
+      écran_questions.addstr(indice_question, 0, options[indice_question])
+  
+  # Affiche tout les changements 
+  écran_questions.refresh()
+
+# Fonction qui pose une question à l'utulisateur à partir d'options
+def PoseQuestion(stdscr, options, question):
+  
+  # Permettent que le programme puisse continuer à jouer quand l'utulisateur ne clique pas des boutons
+  stdscr.nodelay(True)
+  # Enleve le curseur
+  curses.curs_set(0)
+  # Efface l'écran
+  stdscr.clear()
+  # Imprime la question
+  stdscr.addstr(question, curses.A_BOLD)
+  # Imprime des consignes sur comment naviguer sur le ligne d'en dessous
+  stdscr.addstr(1, 0, "Utulisez les touches ARROW: ↑, ↓ pour naviguer et ENTER pour séléctionner.")
+  # Affiche les changements
+  stdscr.refresh()
+
+  # Checher les dimensions y et x du line de commande
+  dimensions = stdscr.getmaxyx()
+  # Prend la deuxiéme valeur du Tuple -> la largeur
+  largeur = dimensions[1]
+  # Crée un nouveau écran au dessus de stdscr qui est de 3 colonnes et de largeur max -1
+  # et qui débute 2 lines en dessous du 0
+  écran_questions = curses.newwin(3, largeur - 1 , 2, 0)
+    
+  # Définit le colonne séléctionnée sur l'écran écran_questions
+  ligne_sélectionnée = 0
+
+  # Définit les touches que l'utulisateur clique
+  touche = None
+
+  # Tandis que l'utulisateur n'a pas cliqué ENTER
+  while touche != ENTER:
+
+    # Essaie de détécter de l'input
+    try:
+      touche = stdscr.getch()
+    except:
+      touche = None
+    
+    # Si le boutton UP est clicqué et qu'il y a de la place pour bougé UP
+    if touche == curses.KEY_UP and ligne_sélectionnée >= 1:
+      # Bouge le ligne selectionée vers le haut
+      ligne_sélectionnée -= 1
+    
+    # Si le boutton DOWN est clicqué et qu'il y a de la place pour bougé DOWN
+    elif touche == curses.KEY_DOWN and ligne_sélectionnée < len(options) - 1:
+      # Bouge le ligne selectionée vers le bas
+      ligne_sélectionnée += 1
+
+    # Affiche les options selon la ligne_sélectionnée
+    ListeQuestions(écran_questions, ligne_sélectionnée, options)
+
+    # Efface les options entre modification (pour qu'ils ne superimposent pas)
+    écran_questions.clear()
+  
+  # Retourne l'option sélectionné quand l'utulisateur à cliqué ENTER
+  return options[ligne_sélectionnée]
+
+# Fonction qui pose l'utulisateur pour so nom et année d'étude
+def PoseInfo(écran, question):
+  # Donne le curseur au utulisateur
+  curses.curs_set(1)
+  # Permettent que le programme puisse continuer à jouer quand l'utulisateur ne clique pas des boutons
+  écran.nodelay(True)
+
+  écran.clear()
+
+  # Ajoute la question
+  écran.addstr(0, 0, question)
+  # Affiche la question
+  écran.refresh()
+
+  # Crée un endroit pour l'utulisateur à écrire
+  écran_texte = curses.newwin(1, 50, 2, 0)
+  endroit_texte = Textbox(écran_texte)
+
+  # Tandis que l'utulisateur n'appuie pas ENTER, permet lui d'écrire
+  touche = None
+  while touche != ENTER: 
+    try:
+      touche = écran_texte.getch()
+    except:
+      touche = None
+  
+    endroit_texte.edit()
+
+  # Prend l'info du endroite_texte
+  info = endroit_texte.gather()
+
+  # Divise l'info en nom et années
+  nom = info.split(" ", 1)[0]
+  année = info.split(" ", 1)[1]
+
+  # Efface l'écran
+  écran.clear()
+
+  # Retourne un tuple
+  return nom, année
+
+

@@ -1,0 +1,5 @@
+deep_translator==1.11.4
+Pillow==10.2.0
+pycountry==23.12.11
+PyGetWindow==0.0.9
+windows-curses==2.3.2
