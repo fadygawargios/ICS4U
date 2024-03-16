@@ -6,7 +6,7 @@
 from common import * 
 from PIL import Image
 from random import randint
-from fonctions import PoseQuestion, FermeImage, ObtenirOptions, listeHasard, formatList
+from fonctions import PoseMultiple, FermeImage, ObtenirOptions, listeHasard, formatList, PoseText, mergeSort
 import time
 
 
@@ -54,7 +54,7 @@ def ÉnigmeNationale(stdscr, objectif, écran_retroaction):
     image.show()
 
     # Obtient la réponse de l'utilisateur à la question
-    réponse = PoseQuestion(stdscr, options, question)
+    réponse = PoseMultiple(stdscr, options, question)
 
     # Ferme l'image (pour qu'ils ne s'accumulent pas)
     FermeImage()
@@ -96,10 +96,10 @@ def PingouinsDuTri(stdscr, objectif, écran_retroaction):
   stdscr.addstr("Salut ..., vous allez jouer à ....")
   stdscr.refresh()
   stdscr.getch()
-  liste =  listeHasard(longeur=5, min=0, max=10)
+  liste_nonTriée = listeHasard(longeur=5, min=0, max=10)
   stdscr.clear()
   # TODO: Function to format str
-  formatList(stdscr, liste)
-  liste_triée = []
+  question = "Met la suite de nombre suivante en ordre croissant: " + formatList(liste_nonTriée)
+  réponse = PoseText(stdscr, question)
+  liste_triée = mergeSort(liste_nonTriée)
   stdscr.refresh()
-  time.sleep(5)

@@ -102,7 +102,9 @@ def Démarrage(stdscr):
 
   # Demande l'utulisateur pour son nom
   écran_info = curses.newwin(6, 105, 0, 0)
-  nom, année = PoseInfo(écran_info, "Veuillez écrire votre prénom et votre année séparer par une espace:")
+  info_utulisateur = PoseText(écran_info, "Veuillez écrire votre prénom et votre année séparer par une espace:")
+  nom = info_utulisateur[0]
+  année = int(info_utulisateur[1])
   stdscr.addstr(0, 0, f"Salut {nom}")
 
   stdscr.addstr(2, 0, "SVP cliquer un bouton pour choisir une difficulté")
@@ -117,7 +119,7 @@ def Démarrage(stdscr):
 
   # Demande l'utulisateur à quelle difficulté il aimerait jouer
   question = "Choisir une difficulté:"
-  difficulté = PoseQuestion(stdscr, DIFFICULTÉS, question)
+  difficulté = PoseMultiple(stdscr, DIFFICULTÉS, question)
   
   # Retourne l'index du difficulté choisi
   return DIFFICULTÉS.index(difficulté), int(année)
@@ -164,7 +166,7 @@ def ListeQuestions(écran_questions, ligne_sélectionnée, options):
   écran_questions.refresh()
 
 # Fonction qui pose une question à l'utulisateur à partir d'options
-def PoseQuestion(stdscr, options, question):
+def PoseMultiple(stdscr, options, question):
   
   # Permettent que le programme puisse continuer à jouer quand l'utulisateur ne clique pas des boutons
   stdscr.nodelay(True)
@@ -222,7 +224,7 @@ def PoseQuestion(stdscr, options, question):
   return options[ligne_sélectionnée]
 
 # Fonction qui pose l'utulisateur pour so nom et année d'étude
-def PoseInfo(écran, question):
+def PoseText(écran, question):
   # Donne le curseur au utulisateur
   curses.curs_set(1)
   # Permettent que le programme puisse continuer à jouer quand l'utulisateur ne clique pas des boutons
@@ -250,17 +252,13 @@ def PoseInfo(écran, question):
     endroit_texte.edit()
 
   # Prend l'info du endroite_texte
-  info = endroit_texte.gather()
+  infos = endroit_texte.gather()
+  # TODO: add comments
+  info_list = infos.split(" ")
 
-  # Divise l'info en nom et années
-  nom = info.split(" ", 1)[0]
-  année = info.split(" ", 1)[1]
+  # Retourne les informations
+  return info_list
 
-  # Efface l'écran
-  écran.clear()
-
-  # Retourne un tuple
-  return nom, année
 
 def listeHasard(longeur, min, max): 
   liste = []
@@ -308,13 +306,12 @@ def merge(leftList, rightList):
 
   return merged_list
 
-def formatList(stdscr, liste):
+def formatList(liste):
   liste_formatted = ""
-  stdscr.clear()
   for i in range(len(liste)):
     if i != len(liste) - 1:
       liste_formatted = liste_formatted + str(liste[i]) + ", "
     else:
       liste_formatted = liste_formatted + str(liste[i])
-  stdscr.addstr(liste_formatted)
-  stdscr.refresh()
+
+  return liste_formatted
