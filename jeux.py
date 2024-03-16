@@ -6,12 +6,23 @@
 from common import * 
 from PIL import Image
 from random import randint
-from fonctions import Démarrage, PoseQuestion, FermeImage, ObtenirOptions
+from fonctions import PoseQuestion, FermeImage, ObtenirOptions, listeHasard, formatList
+import time
 
 
+# TODO: POP ALREADY SEEN QUESTIONS FROM THE LIST OF CARTES AND DREAPEAUX (to avoid repeats)
 def ÉnigmeNationale(stdscr, objectif, écran_retroaction):
+  # TODO: FIND A SPOT TO PUT THIS
   WHITE_AND_RED = curses.color_pair(2)
   WHITE_AND_GREEN = curses.color_pair(3)
+  
+  stdscr.nodelay(False)
+  stdscr.clear()
+  stdscr.addstr(1, 0, "Vous allez jouer Énigme Nationale!!")
+  stdscr.addstr(2, 0, "Dans ce jeu, vous allez devoir identifier le nom d'un pays à partir d'un drapeau ou d'une carte mondiale.")
+  stdscr.addstr(3, 0, "Cliquer ENTER pour commencer")
+  stdscr.refresh()
+  stdscr.getch()
   
   # Définit les points à 0
   points = 0
@@ -79,5 +90,16 @@ def ÉnigmeNationale(stdscr, objectif, écran_retroaction):
 
 #  Description: Dans YYY, l'élève de la 1e à la 2e devra
 
-def PingouinsDuTri():
-  return 5
+def PingouinsDuTri(stdscr, objectif, écran_retroaction):
+
+  stdscr.clear()
+  stdscr.addstr("Salut ..., vous allez jouer à ....")
+  stdscr.refresh()
+  stdscr.getch()
+  liste =  listeHasard(longeur=5, min=0, max=10)
+  stdscr.clear()
+  # TODO: Function to format str
+  formatList(stdscr, liste)
+  liste_triée = []
+  stdscr.refresh()
+  time.sleep(5)

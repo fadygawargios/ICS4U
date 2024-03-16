@@ -11,6 +11,8 @@ DIFFICULTÉS = ["Facile", "Moyenne", "Difficile"]
 # Définit la constante du touche ENTER en ASCII
 ENTER = 10
 
+# TODO: LES FONCTIONS DOIVENT UTULISER LA MEME NOTATION (camelCase ou snake_case)
+
 # Fonction qui crée des options, un sous-liste aléatoire d'une liste passée
 def ObtenirOptions(list):
 
@@ -90,8 +92,9 @@ def Démarrage(stdscr):
   # Enleve tout sur l'écran standard avant d'imprimer les messages d'introduction
   # Paramètres: stdscr.addstr(position_y, position_x, "str du message", attribue_1 | attribue_2)
   stdscr.clear()
-  stdscr.addstr(1, 0, "Bienvenu à Énigme Nationale :)", BLANC_ET_JAUNE | curses.A_BOLD)
-  stdscr.addstr(2, 0, "Dans ce jeu, vous allez devoir identifier le nom d'un pays à partir d'un drapeau ou d'une carte mondiale.")
+  stdscr.addstr(1, 0, "Bienvenu aux jeux éducatives :)", BLANC_ET_JAUNE | curses.A_BOLD)
+  # TODO: FIX THIS...
+  stdscr.addstr(2, 0, "Selon votre année scolaire, vous allez étre assigner un jeux...")
   stdscr.addstr(3, 0, "Cliquez sur n'importe quelle bouton pour commencer!")
   stdscr.refresh()
   stdscr.getch()
@@ -259,4 +262,22 @@ def PoseInfo(écran, question):
   # Retourne un tuple
   return nom, année
 
+def listeHasard(longeur, min, max): 
+  liste = []
+  for i in range(longeur):
+    liste.append(randint(min, max))
+  return liste
 
+def mergeSort(liste):
+  return liste
+
+def formatList(stdscr, liste):
+  liste_formatted = ""
+  stdscr.clear()
+  for i in range(len(liste)):
+    if i != len(liste) - 1:
+      liste_formatted = liste_formatted + str(liste[i]) + ", "
+    else:
+      liste_formatted = liste_formatted + str(liste[i])
+  stdscr.addstr(liste_formatted)
+  stdscr.refresh()

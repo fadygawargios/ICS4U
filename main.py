@@ -44,9 +44,12 @@ def main(stdscr):
   écran_retroaction = curses.newwin(10, largeur - 1, 6, 0)
 
   if année in [1, 2]:
-    erreurs = PingouinsDuTri()
+    erreurs = PingouinsDuTri(stdscr, objectif, écran_retroaction)
   elif année in [3, 4]:
     erreurs = ÉnigmeNationale(stdscr, objectif, écran_retroaction)
+  else:
+    # TODO: explain to the user that they have to be between grades 1 and 4 to have games and end program
+    erreurs = 0
   
   # Affiche l'écran de fin
   ÉcranFin(stdscr, erreurs, WHITE_AND_GREEN)
