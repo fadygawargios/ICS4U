@@ -268,8 +268,45 @@ def listeHasard(longeur, min, max):
     liste.append(randint(min, max))
   return liste
 
-def mergeSort(liste):
-  return liste
+def mergeSort(list):
+  if len(list) <= 1:
+    return list
+
+  middle = len(list) // 2
+  leftList = list[:middle]
+  rightList = list[middle:]
+  leftList = mergeSort(leftList)
+  rightList = mergeSort(rightList)
+  return merge(leftList, rightList)
+  
+
+def merge(leftList, rightList):
+  merged_list = []
+  left_length = len(leftList)
+  right_length = len(rightList)
+  l = 0
+  r = 0
+
+  while l < left_length and r < right_length:
+    if leftList[l] < rightList[r]:
+      merged_list.append(leftList[l])
+      l += 1
+
+    else:
+      merged_list.append(rightList[r])
+      r += 1
+
+  # the remaining number if the list arent the same size
+  while l < left_length:
+    merged_list.append(leftList[l])
+    l += 1
+  
+  # the remaining number if the list arent the same size
+  while r < right_length:
+    merged_list.append(rightList[r])
+    r += 1
+
+  return merged_list
 
 def formatList(stdscr, liste):
   liste_formatted = ""
