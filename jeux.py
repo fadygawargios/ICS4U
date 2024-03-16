@@ -73,8 +73,10 @@ def ÉnigmeNationale(stdscr, objectif, écran_retroaction):
 
   return erreurs
 
+
 #  Description: Dans YYY, l'élève de la 1e à la 2e devra
 
+# todo: add comments
 def PingouinsDuTri(stdscr, objectif, écran_retroaction):
 
   stdscr.nodelay(False)
@@ -87,16 +89,34 @@ def PingouinsDuTri(stdscr, objectif, écran_retroaction):
   stdscr.refresh()
   stdscr.getch()
 
-  liste_nonTriée = listeHasard(longeur=5, min=0, max=10)
-  stdscr.clear()
-  question = "Met la suite de nombre suivante en ordre croissant: " + formatList(liste_nonTriée)
-  réponse = PoseText(stdscr, question)
-  liste_triée = mergeSort(liste_nonTriée)
+  points = 0 
 
-  résultat = VérifieRéponse(str(réponse[0]).split(","), liste_triée, écran_retroaction)
-  stdscr.addstr(5, 0, f"{résultat} : {réponse[0]}")
-  stdscr.refresh()
-  time.sleep(5)
-  stdscr.clear()
-  stdscr.refresh()
-  time.sleep(5)
+  while points != objectif:
+    liste_nonTriée = listeHasard(longeur=5, min=0, max=10)
+    stdscr.clear()
+    question = "Met la suite de nombre suivante en ordre croissant: " + formatList(liste_nonTriée)
+    réponse = PoseText(stdscr, question)
+    
+    réponse_formatted = []
+    
+    for nombre in réponse:
+      if nombre != "":
+        réponse_formatted.append(int(nombre.replace(",", "")))
+
+    liste_triée = mergeSort(liste_nonTriée)
+
+    # todo: try to break this...what if you input chars or idkk
+    résultat = VérifieRéponse(réponse_formatted, liste_triée, écran_retroaction)
+    
+    if résultat == False:
+      erreurs += 1
+
+      if points != 0:
+        points -= 1
+    else:
+      points += 1
+    # Affiche les changements de points
+    écran_retroaction.addstr(1, 0, f"Points: {points}")
+    écran_retroaction.refresh()
+    time.sleep(1.5)
+  

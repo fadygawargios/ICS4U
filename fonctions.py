@@ -109,7 +109,7 @@ def Démarrage(stdscr):
   stdscr.addstr(2, 0, "SVP cliquer un bouton pour choisir une difficulté")
   stdscr.addstr(3, 0, "En mode facile vous aurez besoin de 5 points, en mode moyenne, 10 points et mode difficile, 15 points pour gagner!")
   stdscr.addstr(5, 0, "ATTENTION:", curses.A_STANDOUT)
-  stdscr.addstr(5, 11, " Vous perdez des points si vous répondez mal! Bonne chance!")
+  stdscr.addstr(5, 11, "Vous perdez des points si vous répondez mal! Bonne chance!")
   # Fait un refresh à l'écrain pour afficher les changements
   stdscr.refresh()
 
@@ -322,6 +322,7 @@ def formatList(liste):
 
   return liste_formatted
 
+# todo: translate comments into french
 def print_ascii_art(screen):
   # Define starting position (y, x)
   y = 1  # Start from the second row (avoiding the top line)
@@ -367,7 +368,7 @@ def VérifieRéponse(réponse, bonne_réponse, écran_retroaction):
   WHITE_AND_RED = curses.color_pair(2)
   WHITE_AND_GREEN = curses.color_pair(3)
  # Si la réponse de l'utilisateur est la bonne réponse
-  if réponse == bonne_réponse:
+  if str(réponse) == str(bonne_réponse):
 
     # Imprime la rétroaction sur le window «écran_retroaction»
     écran_retroaction.clear()
