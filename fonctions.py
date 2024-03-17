@@ -29,24 +29,31 @@ def ObtenirOptions(list):
   nombres_aleatoires = []
 
   # Creation de 3 options:
-  for i in range(3):
-    # Génére un nombre aléatoire entre 0 et la longeur de la liste
-    nombres_aleatoire = randint(0, longueur)
-    # Trouve le nom d'un fichier aléatoire (ce qui correspond à l'index de nombres_aléatoires) 
-    fichier_aleatoire = list[nombres_aleatoire]
-    # Transforme le nom du ficher en nom de pays
-    counry_name = FichierVersNom(fichier_aleatoire)
+  options_à_chercher = 3
+  while options_à_chercher != 0:
 
-    # Si le nombre_aléatoire était déja obtenu
-    if nombres_aleatoire in nombres_aleatoires:
-      # Cherche un nouveau
-      nombres_aleatoire = randint(0, longueur)
+    # Génére un nombre aléatoire entre 0 et la longeur de la liste
+    nombre_aleatoire = randint(0, longueur)
     
-    # Ajoute le nombre_aléatoire qu'on vient de voir dans la liste
-    nombres_aleatoires.append(nombres_aleatoire)
-    # Ajoute le nom du pays dans options et le noms du fichier correspondantes dans options_nom_fichiers
-    options.append(counry_name)
-    options_nom_fichiers.append(fichier_aleatoire)
+    # Si le nombre n'a pas était vu encore
+    if nombre_aleatoire not in nombres_aleatoires:
+      
+      # Ajoute le nombre_aléatoire qu'on vient de voir dans la liste
+      nombres_aleatoires.append(nombre_aleatoire)
+
+      # Trouve le nom d'un fichier aléatoire (ce qui correspond à l'index de nombres_aléatoires) 
+      fichier_aleatoire = list[nombre_aleatoire]
+
+      # Transforme le nom du ficher en nom de pays
+      nom_pays = FichierVersNom(fichier_aleatoire)
+
+      # Ajoute le nom du pays dans options et le noms du fichier correspondantes dans options_nom_fichiers
+      options.append(nom_pays)
+
+      options_nom_fichiers.append(fichier_aleatoire)
+      
+      # Un moins d'options qui reste à chercher
+      options_à_chercher -= 1
 
   # Retourne les options, leurs nom de fichiers et une int aléatoire comme index de la bonne réponse du liste options
   return options, options_nom_fichiers, randint(0, len(options) - 1)
@@ -270,6 +277,7 @@ def listeHasard(longeur, min, max):
     if nombre_aléatoire not in liste:
       liste.append(nombre_aléatoire)
       longeur -= 1
+      
   return liste
 
 # todo: add comments

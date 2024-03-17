@@ -11,7 +11,6 @@ import time
 import curses
 
 
-# todo: POP ALREADY SEEN QUESTIONS FROM THE LIST OF CARTES AND DREAPEAUX (to avoid repeats)
 def ÉnigmeNationale(stdscr, objectif, écran_retroaction):
 
   stdscr.nodelay(False)
