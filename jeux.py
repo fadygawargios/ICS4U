@@ -97,7 +97,7 @@ def PingouinsDuTri(stdscr, objectif, écran_retroaction):
 
   # Lorsque l'utulisateur n'a pas atteint l'objectif de point
   while points != objectif:
-    liste_nonTriée = listeHasard(longeur=5, min=0, max=10)
+    liste_nonTriée = listeHasard(longeur=5, min=1, max=100)
     stdscr.clear()
     if points % 2 == 0:
       question = "Met la suite de nombre suivante en ordre croissant: " + formatList(liste_nonTriée)

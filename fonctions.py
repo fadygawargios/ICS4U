@@ -252,8 +252,6 @@ def PoseText(écran, question):
     endroit_texte.edit()
     touche = écran_texte.getch()
     
- 
-
   # Prend l'info du endroite_texte
   infos = endroit_texte.gather()
   
@@ -267,8 +265,11 @@ def PoseText(écran, question):
 # todo: add comments
 def listeHasard(longeur, min, max): 
   liste = []
-  for i in range(longeur):
-    liste.append(randint(min, max))
+  while longeur != 0:
+    nombre_aléatoire = randint(min, max)
+    if nombre_aléatoire not in liste:
+      liste.append(nombre_aléatoire)
+      longeur -= 1
   return liste
 
 # todo: add comments
