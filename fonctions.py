@@ -4,7 +4,7 @@ import curses
 from curses.textpad import Textbox, rectangle
 import pygetwindow as gw
 from random import randint
-import time
+import sys
 
 # Définit la constante des trois difficultés possibles
 DIFFICULTÉS = ["Facile", "Moyenne", "Difficile"]
@@ -88,6 +88,7 @@ def FichierVersNom(file):
 # stdscr -> "standard screen"
 # Fonction appelée par main() pour imprimer l'introduction et commencer le jeu
 def Démarrage(stdscr):
+
   WHITE_AND_YELLOW = curses.color_pair(1)
   # Assure qu'il y aura un délai jusqu'à l'utulisateur appuie un bouton
   stdscr.nodelay(False)
@@ -101,8 +102,12 @@ def Démarrage(stdscr):
   stdscr.addstr(1, 0, "Bienvenu aux jeux éducatives :)", WHITE_AND_YELLOW | curses.A_BOLD)
   # todo: work on prompts and explanations
   
-  stdscr.addstr(2, 0, "Selon votre année scolaire, vous allez étre assigner un jeux...")
-  stdscr.addstr(3, 0, "Cliquez sur n'importe quelle bouton pour commencer!")
+  stdscr.addstr(2, 0, "Selon votre année scolaire, vous allez être assigner un jeux:")
+  stdscr.addstr(3, 0, "1e-2e année : ", curses.A_BOLD)
+  stdscr.addstr(3, 15, "PINGOUINS DU TRI", WHITE_AND_YELLOW | curses.A_BOLD)
+  stdscr.addstr(4, 0, "3e-4e année : ", curses.A_BOLD)
+  stdscr.addstr(4, 15, "ÉNIGME NATIONALE", WHITE_AND_YELLOW | curses.A_BOLD)
+  stdscr.addstr(5, 0, "Cliquez sur n'importe quelle bouton pour commencer!")
   stdscr.refresh()
   stdscr.getch()
   stdscr.clear()
@@ -111,9 +116,40 @@ def Démarrage(stdscr):
   écran_info = curses.newwin(6, 105, 0, 0)
   info_utulisateur = PoseText(écran_info, "Veuillez écrire votre prénom et votre année séparer par une espace:")
   nom = info_utulisateur[0]
-  année = int(info_utulisateur[1])
-  stdscr.addstr(0, 0, f"Salut {nom}")
+  année = info_utulisateur[1]
+  
+  # todo: add comments
+  stdscr.nodelay(False)
 
+  for char in année:
+    if not char.isnumeric():
+      année = année.strip(char)
+
+  if année == None or année == "":
+    stdscr.clear()
+    # todo: shorten this line
+    stdscr.addstr("Malheureusement, sans préciser une année, nous ne sommes pas en mesure de vous jumeler à un jeu.")
+    stdscr.refresh()
+    stdscr.getch()
+    sys.exit(1)
+
+
+  try: 
+    année = int(année)
+  except ValueError:
+    année = None
+    
+  # Si l'utulisateur est trop vieux ou jeune pour jouer
+  if année > 4 or année < 1:
+    stdscr.clear()
+    stdscr.addstr(0, 0, "Vous n'avez pas l'âge requis pour jouer au jeu proposé!")
+    stdscr.addstr(1, 0, f"Vous êtes en {année}e, mais devez être entre la 1e et la 4e année pour jouer.", curses.A_BOLD)
+    stdscr.refresh()
+    stdscr.getch()
+    sys.exit(1)
+
+
+  stdscr.addstr(0, 0, f"Salut {nom}")
   stdscr.addstr(2, 0, "SVP cliquer un bouton pour choisir une difficulté")
   stdscr.addstr(3, 0, "En mode facile vous aurez besoin de 5 points, en mode moyenne, 10 points et mode difficile, 15 points pour gagner!")
   stdscr.addstr(5, 0, "ATTENTION:", curses.A_STANDOUT)
@@ -127,12 +163,14 @@ def Démarrage(stdscr):
   # Demande l'utulisateur à quelle difficulté il aimerait jouer
   question = "Choisir une difficulté:"
   difficulté = PoseMultiple(stdscr, DIFFICULTÉS, question)
+
+  return DIFFICULTÉS.index(difficulté), nom, année
+
   
   # Retourne l'index du difficulté choisi
-  return DIFFICULTÉS.index(difficulté), int(année)
 
 # Fonction appelée par main() pour imprimer la conclusion et finir le jeu
-def ÉcranFin(stdscr, erreurs):
+def ÉcranFin(stdscr, erreurs, nom):
   
   WHITE_AND_YELLOW = curses.color_pair(1)
   WHITE_AND_GREEN = curses.color_pair(3)
@@ -144,7 +182,8 @@ def ÉcranFin(stdscr, erreurs):
   stdscr.clear()
 
   # Imprime la conclusion à travers 3 lignes
-  stdscr.addstr("BRAVO!! VOUS AVEZ GAGNER!!", WHITE_AND_GREEN)
+  nom = nom.upper()
+  stdscr.addstr(f"BRAVO {nom}!! VOUS AVEZ GAGNER!!", WHITE_AND_GREEN)
   stdscr.addstr(1,0, f"Vous avez faite {erreurs} erreurs.")
   stdscr.addstr(2,0,  "Pour fermer le jeu, appuyer")
   stdscr.addstr(2, 28, "ENTER", curses.A_STANDOUT)
@@ -397,7 +436,9 @@ def VérifieRéponse(réponse, bonne_réponse, écran_retroaction):
 
     # Imprime la rétroaction sur le window «écran_retroaction»
     écran_retroaction.clear()
+    bonne_réponse = bonne_réponse.strip("[]")
     écran_retroaction.addstr(f"Mauvaise Réponse! La réponse était {bonne_réponse}.", WHITE_AND_RED | curses.A_BOLD)
+    
     écran_retroaction.refresh()
 
     return False

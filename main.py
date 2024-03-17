@@ -16,6 +16,7 @@ from fonctions import Démarrage, ÉcranFin
 import curses
 from jeux import ÉnigmeNationale, PingouinsDuTri
 from common import * 
+
 # stdscr -> «Standard Screen» que Curses va afficher au dessus du line de commande
 def main(stdscr):
   
@@ -29,7 +30,7 @@ def main(stdscr):
 
   # Appelle la fonction de démarrage pour choisir la difficulté
   # todo: make sure user put int for année 
-  difficulté, année = Démarrage(stdscr)
+  difficulté, nom, année = Démarrage(stdscr)
 
   # Établit l'objectif nécessaire en fonction de la difficulté choisie
   if difficulté == FACILE:
@@ -48,12 +49,12 @@ def main(stdscr):
     erreurs = PingouinsDuTri(stdscr, objectif, écran_retroaction)
   elif année in [3, 4]:
     erreurs = ÉnigmeNationale(stdscr, objectif, écran_retroaction)
-  else:
-    # todo: explain to the user that they have to be between grades 1 and 4 to have games and end program
-    erreurs = 0
+
+    
   
   # Affiche l'écran de fin
-  ÉcranFin(stdscr, erreurs)
+  ÉcranFin(stdscr, erreurs, nom)
+  
 
 
 # Exécute la fonction principale avec Curses

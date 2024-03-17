@@ -1,8 +1,3 @@
-
-#  Description: Dans Énigme Nationale, l'élève de la 3e à la 4e année devra choisir 
-#  le nom d'un pays parmi trois choix à partir d'une carte mondiale ou d'un drapeau pour atteindre
-#  une certain montant de point. 
-
 from common import * 
 from PIL import Image
 from random import randint
@@ -12,12 +7,13 @@ import curses
 
 
 def ÉnigmeNationale(stdscr, objectif, écran_retroaction):
+  WHITE_AND_YELLOW = curses.color_pair(1)
 
   stdscr.nodelay(False)
   stdscr.clear()
-  stdscr.addstr(1, 0, "Vous allez jouer Énigme Nationale!!")
-  stdscr.addstr(2, 0, "Dans ce jeu, vous allez devoir identifier le nom d'un pays à partir d'un drapeau ou d'une carte mondiale.")
-  stdscr.addstr(3, 0, "Cliquer ENTER pour commencer")
+  stdscr.addstr(0, 0, "Vous allez jouer Énigme Nationale!!", WHITE_AND_YELLOW)
+  stdscr.addstr(1, 0, "Dans ce jeu, vous allez devoir identifier le nom d'un pays à partir d'un drapeau ou d'une carte mondiale.")
+  stdscr.addstr(2, 0, "Cliquez sur n'importe quelle bouton pour commencer!")
   stdscr.refresh()
   stdscr.getch()
   
@@ -77,13 +73,12 @@ def ÉnigmeNationale(stdscr, objectif, écran_retroaction):
 
 # todo: add comments
 def PingouinsDuTri(stdscr, objectif, écran_retroaction):
-
-  stdscr.nodelay(False)
   WHITE_AND_YELLOW = curses.color_pair(1)
-
+  
+  stdscr.nodelay(False)
   stdscr.clear()
-  stdscr.addstr(5, 50, "Salut ..., vous allez jouer à ")
-  stdscr.addstr(5, 80, "PINGOINS DU TRI", WHITE_AND_YELLOW)
+  stdscr.addstr(5, 50, "BIENVENU À", curses.A_BOLD)
+  stdscr.addstr(5, 61, "PINGOINS DU TRI", WHITE_AND_YELLOW | curses.A_BOLD)
   print_ascii_art(stdscr)
   stdscr.refresh()
   stdscr.getch()
