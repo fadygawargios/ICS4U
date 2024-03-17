@@ -11,9 +11,12 @@ def ÉnigmeNationale(stdscr, objectif, écran_retroaction):
 
   stdscr.nodelay(False)
   stdscr.clear()
-  stdscr.addstr(0, 0, "Vous allez jouer Énigme Nationale!!", WHITE_AND_YELLOW)
-  stdscr.addstr(1, 0, "Dans ce jeu, vous allez devoir identifier le nom d'un pays à partir d'un drapeau ou d'une carte mondiale.")
-  stdscr.addstr(2, 0, "Cliquez sur n'importe quelle bouton pour commencer!")
+  stdscr.addstr(4, 65, "BIENVENU À", curses.A_BOLD)
+  stdscr.addstr(4, 65 + 11, "ÉNIGME NATIONALE!!", WHITE_AND_YELLOW | curses.A_BOLD)
+  stdscr.addstr(5, 65, "Dans ce jeu, vous allez devoir identifier le nom")
+  stdscr.addstr(6, 65, "d'un pays à partir d'un drapeau ou d'une carte mondiale.")
+  stdscr.addstr(7, 65, "Cliquez sur n'importe quelle bouton pour commencer!")
+  print_ascii_art(stdscr, jeu=1)
   stdscr.refresh()
   stdscr.getch()
   
@@ -31,7 +34,7 @@ def ÉnigmeNationale(stdscr, objectif, écran_retroaction):
       # Cherche les pays, leurs nom de fichers correspondante et la bonne response pour une question de drapeaux
       options, option_noms_fichier, index_bonne_réponse = ObtenirOptions(LISTE_DRAPEAUX)
       # Prépare la question
-      question = "À quelle pays appartient ce drapeaux?"
+      question = f"QUESTION #{points + 1}: À quelle pays appartient ce drapeaux?"
       # Prépare le chemin de l'image de la bonne réponse
       chemin_image = os.path.join(CHEMIN_DRAPEAUX, option_noms_fichier[index_bonne_réponse])
 
@@ -39,6 +42,8 @@ def ÉnigmeNationale(stdscr, objectif, écran_retroaction):
     else:
       # Cherche les pays, nom de ficher, et bonne réponse pour une question de cartes
       options, option_noms_fichier, index_bonne_réponse = ObtenirOptions(LISTE_CARTES)
+      # Prépare la question
+      question = f"QUESTION #{points + 1}: Quel est le pays sur la carte?"
       # Prépare le chemin de l'image de la bonne réponse
       chemin_image = os.path.join(CHEMIN_CARTES , option_noms_fichier[index_bonne_réponse])
 
@@ -78,8 +83,10 @@ def PingouinsDuTri(stdscr, objectif, écran_retroaction):
   stdscr.nodelay(False)
   stdscr.clear()
   stdscr.addstr(5, 50, "BIENVENU À", curses.A_BOLD)
-  stdscr.addstr(5, 61, "PINGOINS DU TRI", WHITE_AND_YELLOW | curses.A_BOLD)
-  print_ascii_art(stdscr)
+  stdscr.addstr(5, 61, "PINGOUINS DU TRI", WHITE_AND_YELLOW | curses.A_BOLD)
+  stdscr.addstr(6, 50, "Dans ce jeu, vous allez devoir mettre des suites de")
+  stdscr.addstr(7, 50, "nombres en ordre croissant et décroissant.")
+  print_ascii_art(stdscr, jeu=2)
   stdscr.refresh()
   stdscr.getch()
   
@@ -94,10 +101,10 @@ def PingouinsDuTri(stdscr, objectif, écran_retroaction):
     liste_nonTriée = listeHasard(longeur=5, min=1, max=100)
     stdscr.clear()
     if points % 2 == 0:
-      question = "Met la suite de nombre suivante en ordre croissant: " + formatList(liste_nonTriée)
+      question = f"QUESTION #{points + 1}: Met la suite de nombre suivante en ordre CROISSANT: " + formatList(liste_nonTriée)
       list_triée = mergeSort(liste_nonTriée, croissant=True)
     else:
-      question = "Met la suite de nombre suivante en ordre décroissant: " + formatList(liste_nonTriée)
+      question = f"QUESTION #{points + 1}: Met la suite de nombre suivante en ordre DÉCROISSANT: " + formatList(liste_nonTriée)
       list_triée = mergeSort(liste_nonTriée, croissant=False)
 
 

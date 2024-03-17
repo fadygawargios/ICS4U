@@ -150,7 +150,7 @@ def Démarrage(stdscr):
 
 
   stdscr.addstr(0, 0, f"Salut {nom}")
-  stdscr.addstr(2, 0, "SVP cliquer un bouton pour choisir une difficulté")
+  stdscr.addstr(2, 0, "SVP cliquer un bouton pour choisir une difficulté.")
   stdscr.addstr(3, 0, "En mode facile vous aurez besoin de 5 points, en mode moyenne, 10 points et mode difficile, 15 points pour gagner!")
   stdscr.addstr(5, 0, "ATTENTION:", curses.A_STANDOUT)
   stdscr.addstr(5, 11, "Vous perdez des points si vous répondez mal! Bonne chance!")
@@ -187,7 +187,7 @@ def ÉcranFin(stdscr, erreurs, nom):
   stdscr.addstr(1,0, f"Vous avez faite {erreurs} erreurs.")
   stdscr.addstr(2,0,  "Pour fermer le jeu, appuyer")
   stdscr.addstr(2, 28, "ENTER", curses.A_STANDOUT)
-  stdscr.addstr(3, 0, "Merci d'avoir jouer Énigme Nationale :)", WHITE_AND_YELLOW)
+  stdscr.addstr(3, 0, "Merci d'avoir jouer :)", WHITE_AND_YELLOW)
 
 
   # Affiche la conclusion
@@ -227,7 +227,11 @@ def PoseMultiple(stdscr, options, question):
   # Imprime la question
   stdscr.addstr(question, curses.A_BOLD)
   # Imprime des consignes sur comment naviguer sur le ligne d'en dessous
-  stdscr.addstr(1, 0, "Utulisez les touches ARROW: ↑, ↓ pour naviguer et ENTER pour séléctionner.")
+  stdscr.addstr(1, 0, "Utulisez les touches ")
+  stdscr.addstr(1, 21, "ARROW: ↑, ↓", curses.A_STANDOUT)
+  stdscr.addstr(1, 33, "pour naviguer et ")
+  stdscr.addstr(1, 50, "ENTER", curses.A_STANDOUT)
+  stdscr.addstr(1, 56, "pour séléctionner.")
   # Affiche les changements
   stdscr.refresh()
 
@@ -276,6 +280,8 @@ def PoseMultiple(stdscr, options, question):
 # todo: fix having to click enter several times
 # Fonction qui pose l'utulisateur pour so nom et année d'étude
 def PoseText(écran, question):
+
+
   # Donne le curseur au utulisateur
   curses.curs_set(1)
   # Permettent que le programme puisse continuer à jouer quand l'utulisateur ne clique pas des boutons
@@ -284,12 +290,14 @@ def PoseText(écran, question):
   écran.clear()
 
   # Ajoute la question
-  écran.addstr(0, 0, question)
+  écran.addstr(0, 0, question, curses.A_BOLD)
+  écran.addstr(1, 0, "Écrivez dans la case ci-dessous, puis cliquez sur      .")
+  écran.addstr(1, 50, "ENTER", curses.A_STANDOUT)
   # Affiche la question
   écran.refresh()
 
   # Crée un endroit pour l'utulisateur à écrire
-  écran_texte = curses.newwin(1, 50, 2, 0)
+  écran_texte = curses.newwin(1, 50, 3, 0)
   endroit_texte = Textbox(écran_texte)
 
   # Tandis que l'utulisateur n'appuie pas ENTER, permet lui d'écrire
@@ -378,41 +386,60 @@ def formatList(liste):
   return liste_formatted
 
 # todo: translate comments into french
-def print_ascii_art(screen):
+def print_ascii_art(screen, jeu):
   # Define starting position (y, x)
   y = 1  # Start from the second row (avoiding the top line)
   x = 5   # Adjust this for desired horizontal centering
 
-  art_lines = [
-      "",
-      "                 .88888888:.",
-      "                88888888.88888.",
-      "              .8888888888888888.",
-      "              888888888888888888",
-      "              88' _`88'_  `88888",
-      "              88 88 88 88  88888",
-      "              88_88_::_88_:88888",
-      "              88:::,::,:::::8888",
-      "              88`:::::::::'`8888",
-      "             .88  `::::'    8:88.",
-      "            8888            `8:888.",
-      "          .8888'             `888888.",
-      "         .8888:..  .::.  ...:'8888888:.",
-      "        .8888.'     :'     `'::`88:88888",
-      "       .8888        '         `.888:8888.",
-      "      888:8         .           888:88888",
-      "    .888:88        .:           888:88888: ",
-      "    8888888.       ::           88:888888",
-      "    `.::.888.      ::          .88888888",
-      "   .::::::.888.    ::         :::`8888'.:.",
-      "  ::::::::::.888   '         .::::::::::::",
-      "  ::::::::::::.8    '      .:8::::::::::::.",
-      " .::::::::::::::.        .:888:::::::::::::",
-      " :::::::::::::::88:.__..:88888:::::::::::'",
-      "  `'.:::::::::::88888888888.88:::::::::'",
-      "      `':::_:' -- '' -'-' `':_::::'`",
-      " "
+  # sources: https://ascii.co.uk/art
+  if jeu == 1:
+      # Define the ASCII art lines
+    art_lines = [
+      ".. . . . . . . . . . . . . . . . . . . . . . . . . . . . .",
+      ".. . . . . . . .#######. . . . . . . . . . . . . . . . .",
+      ".. . . . . . .#. .#### . . . ####. . .###############. . .",
+      ".. . ########. ##. ##. . . ######################### . . .",
+      ".. . . ##########. . . . ######################. . . . . .",
+      ".. . . .######## . . . .   ################### . . . . . .",
+      ".. . . . ### .   . . . .#####. ##############. # . . . . .",
+      ".. . . . . ##### . . . .#######. ##########. . . . . . . .",
+      ".. . . . . .###### . . . .#### . . . . .## . . . . . . . .",
+      ".. . . . . . ##### . . . .#### # . . . . . ##### . . . . .",
+      ".. . . . . . ### . . . . . ##. . . . . . . . ### .#. . . .",
+      ".. . . . . . ##. . . . . . . . . . . . . . . . . . . . . .",
+      ".. . . . . . . . . . . . . . . . . . . . . . . . . . . . ."
   ]
+  else:
+    art_lines = [
+        "",
+        "                 .88888888:.",
+        "                88888888.88888.",
+        "              .8888888888888888.",
+        "              888888888888888888",
+        "              88' _`88'_  `88888",
+        "              88 88 88 88  88888",
+        "              88_88_::_88_:88888",
+        "              88:::,::,:::::8888",
+        "              88`:::::::::'`8888",
+        "             .88  `::::'    8:88.",
+        "            8888            `8:888.",
+        "          .8888'             `888888.",
+        "         .8888:..  .::.  ...:'8888888:.",
+        "        .8888.'     :'     `'::`88:88888",
+        "       .8888        '         `.888:8888.",
+        "      888:8         .           888:88888",
+        "    .888:88        .:           888:88888: ",
+        "    8888888.       ::           88:888888",
+        "    `.::.888.      ::          .88888888",
+        "   .::::::.888.    ::         :::`8888'.:.",
+        "  ::::::::::.888   '         .::::::::::::",
+        "  ::::::::::::.8    '      .:8::::::::::::.",
+        " .::::::::::::::.        .:888:::::::::::::",
+        " :::::::::::::::88:.__..:88888:::::::::::'",
+        "  `'.:::::::::::88888888888.88:::::::::'",
+        "      `':::_:' -- '' -'-' `':_::::'`",
+        " "
+    ]
 
   # Print each line of art with increasing y-value
   for line in art_lines:
