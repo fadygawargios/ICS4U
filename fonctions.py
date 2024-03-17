@@ -467,6 +467,7 @@ def vérifie_réponse(réponse, bonne_réponse, écran_retroaction):
     
     # gives retroaction
     if type(bonne_réponse) == list:
+      temps_rétroaction = 5
       bonne_réponse_str = str(bonne_réponse).strip("[]")
       écran_retroaction.addstr(0, 0, f"Mauvaise Réponse! La réponse était {bonne_réponse_str}.", WHITE_AND_RED | curses.A_BOLD)
       écran_retroaction.addstr(1, 0, "Voici les erreurs dans votre réponse:")
@@ -478,11 +479,39 @@ def vérifie_réponse(réponse, bonne_réponse, écran_retroaction):
           écran_retroaction.addstr(1, 38 + (num_index * 3), f"{réponse[num_index]}")
     
     else:
+      temps_rétroaction = 0.5
       écran_retroaction.addstr(f"Mauvaise Réponse! La réponse était {bonne_réponse}.", WHITE_AND_RED | curses.A_BOLD)
     
     écran_retroaction.refresh()
-    # todo: replace this for smt more case specific
-    time.sleep(4)
-
+    time.sleep(temps_rétroaction)
 
     return False
+
+def intro_jeu(stdscr, espace, jeu):
+  WHITE_AND_YELLOW = curses.color_pair(1)
+
+  if jeu == 1:
+    nom = "ÉNIGME NATIONALE!!"
+    description_ligne_1 = "Dans ce jeu, vous allez devoir identifier le nom"
+    description_ligne_2 = "d'un pays à partir d'un drapeau ou d'une carte mondiale."
+  else:
+    nom = "PINGOUINS DU TRI!!"
+    description_ligne_1 = "Dans ce jeu, vous allez devoir mettre des suites de"
+    description_ligne_2 = "nombres en ordre croissant et décroissant."
+
+  
+  stdscr.nodelay(False)
+  stdscr.clear()
+  stdscr.addstr(5, espace, "BIENVENU À", curses.A_BOLD)
+  stdscr.addstr(5, espace + 11, f"{nom}", WHITE_AND_YELLOW | curses.A_BOLD)
+  stdscr.addstr(6, espace, f"{description_ligne_1}")
+  stdscr.addstr(7, espace, f"{description_ligne_2}")
+  stdscr.addstr(8, espace, "Cliquez sur n'importe quelle bouton pour commencer!")
+  
+  if jeu == 1:
+    imprime_art(stdscr, jeu=1)
+  else:
+    imprime_art(stdscr, jeu=2)
+
+  stdscr.refresh()
+  stdscr.getch()

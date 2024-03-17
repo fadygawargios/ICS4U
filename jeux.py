@@ -1,23 +1,13 @@
 from common import * 
 from PIL import Image
-from fonctions import pose_multiple, ferme_image, obtenir_options, liste_hasard, format_liste, pose_texte, merge_sort, imprime_art, vérifie_réponse
+from fonctions import pose_multiple, ferme_image, obtenir_options, liste_hasard, format_liste, pose_texte, merge_sort, imprime_art, vérifie_réponse, intro_jeu
 import time
 import curses
 
 
 def énigme_nationale(stdscr, objectif, écran_retroaction):
-  WHITE_AND_YELLOW = curses.color_pair(1)
 
-  stdscr.nodelay(False)
-  stdscr.clear()
-  stdscr.addstr(4, 65, "BIENVENU À", curses.A_BOLD)
-  stdscr.addstr(4, 65 + 11, "ÉNIGME NATIONALE!!", WHITE_AND_YELLOW | curses.A_BOLD)
-  stdscr.addstr(5, 65, "Dans ce jeu, vous allez devoir identifier le nom")
-  stdscr.addstr(6, 65, "d'un pays à partir d'un drapeau ou d'une carte mondiale.")
-  stdscr.addstr(7, 65, "Cliquez sur n'importe quelle bouton pour commencer!")
-  imprime_art(stdscr, jeu=1)
-  stdscr.refresh()
-  stdscr.getch()
+  intro_jeu(stdscr, espace=65, jeu=1)
   
   # Définit les points à 0
   points = 0
@@ -77,17 +67,8 @@ def énigme_nationale(stdscr, objectif, écran_retroaction):
 
 # todo: add comments
 def pingouins_du_tri(stdscr, objectif, écran_retroaction):
-  WHITE_AND_YELLOW = curses.color_pair(1)
   
-  stdscr.nodelay(False)
-  stdscr.clear()
-  stdscr.addstr(5, 50, "BIENVENU À", curses.A_BOLD)
-  stdscr.addstr(5, 61, "PINGOUINS DU TRI", WHITE_AND_YELLOW | curses.A_BOLD)
-  stdscr.addstr(6, 50, "Dans ce jeu, vous allez devoir mettre des suites de")
-  stdscr.addstr(7, 50, "nombres en ordre croissant et décroissant.")
-  imprime_art(stdscr, jeu=2)
-  stdscr.refresh()
-  stdscr.getch()
+  intro_jeu(stdscr, espace=50, jeu=2)
   
   # Définit les points à 0
   points = 0
