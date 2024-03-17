@@ -1,10 +1,11 @@
 import pycountry
 from deep_translator import GoogleTranslator
 import curses
-from curses.textpad import Textbox, rectangle
+from curses.textpad import Textbox
 import pygetwindow as gw
 from random import randint
 import sys
+import time
 
 # Définit la constante des trois difficultés possibles
 DIFFICULTÉS = ["Facile", "Moyenne", "Difficile"]
@@ -463,9 +464,24 @@ def VérifieRéponse(réponse, bonne_réponse, écran_retroaction):
 
     # Imprime la rétroaction sur le window «écran_retroaction»
     écran_retroaction.clear()
-    bonne_réponse = bonne_réponse.strip("[]")
-    écran_retroaction.addstr(f"Mauvaise Réponse! La réponse était {bonne_réponse}.", WHITE_AND_RED | curses.A_BOLD)
+    
+    # gives retroaction
+    if type(bonne_réponse) == list:
+      bonne_réponse_str = str(bonne_réponse).strip("[]")
+      écran_retroaction.addstr(0, 0, f"Mauvaise Réponse! La réponse était {bonne_réponse_str}.", WHITE_AND_RED | curses.A_BOLD)
+      écran_retroaction.addstr(1, 0, "Voici les erreurs dans votre réponse:")
+
+      for num_index in range(5):
+        if réponse[num_index] != bonne_réponse[num_index]:
+            écran_retroaction.addstr(1, 38 + (num_index * 3), f"{réponse[num_index]}", WHITE_AND_RED)
+        else:
+          écran_retroaction.addstr(1, 38 + (num_index * 3), f"{réponse[num_index]}")
+    
+    else:
+      écran_retroaction.addstr(f"Mauvaise Réponse! La réponse était {bonne_réponse}.", WHITE_AND_RED | curses.A_BOLD)
     
     écran_retroaction.refresh()
+    time.sleep(4)
+
 
     return False

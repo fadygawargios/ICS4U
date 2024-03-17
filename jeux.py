@@ -116,8 +116,6 @@ def PingouinsDuTri(stdscr, objectif, écran_retroaction):
       if nombre != "":
         réponse_formatted.append(int(nombre.replace(",", "")))
 
-    
-
     # todo: try to break this...what if you input chars or idkk
     résultat = VérifieRéponse(réponse_formatted, list_triée, écran_retroaction)
     
@@ -129,7 +127,7 @@ def PingouinsDuTri(stdscr, objectif, écran_retroaction):
     else:
       points += 1
     # Affiche les changements de points
-    écran_retroaction.addstr(1, 0, f"Points: {points}")
+    écran_retroaction.addstr(2, 0, f"Points: {points}")
     écran_retroaction.refresh()
     time.sleep(1.5)
   
