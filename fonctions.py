@@ -17,7 +17,7 @@ ENTER = 10
 # todo: **LES FONCTIONS DOIVENT UTULISER LA MEME NOTATION (camelCase ou snake_case)
 
 # Fonction qui crée des options, un sous-liste aléatoire d'une liste passée
-def ObtenirOptions(list):
+def obtenir_options(list):
 
   # Définit la longeur de la liste - 1 pour la génération de nombres aléatoires
   longueur = len(list) - 1
@@ -46,7 +46,7 @@ def ObtenirOptions(list):
       fichier_aleatoire = list[nombre_aleatoire]
 
       # Transforme le nom du ficher en nom de pays
-      nom_pays = FichierVersNom(fichier_aleatoire)
+      nom_pays = fichier_vers_nom(fichier_aleatoire)
 
       # Ajoute le nom du pays dans options et le noms du fichier correspondantes dans options_nom_fichiers
       options.append(nom_pays)
@@ -61,14 +61,14 @@ def ObtenirOptions(list):
 
     
 # Fonction qui ferme le fenetre d'image ouverte
-def FermeImage():
+def ferme_image():
   # Pour chaque fenetre "Photos" (celui qui l'ouvre l'image sur Windows)
   for fenetre in gw.getWindowsWithTitle(f"Photos"):
     # Ferme le
     fenetre.close()
 
 # Fonction qui prend le nom d'un fichier et retourne le nom du pays
-def FichierVersNom(file):
+def fichier_vers_nom(file):
   # *Sachez que les fichiers sont nommés avec le code du pays et l'extension .jpg (ex: ca.jpg pour Canada)
 
   # Enleve l'extension
@@ -88,7 +88,7 @@ def FichierVersNom(file):
 
 # stdscr -> "standard screen"
 # Fonction appelée par main() pour imprimer l'introduction et commencer le jeu
-def Démarrage(stdscr):
+def démarrage(stdscr):
 
   WHITE_AND_YELLOW = curses.color_pair(1)
   # Assure qu'il y aura un délai jusqu'à l'utulisateur appuie un bouton
@@ -115,7 +115,7 @@ def Démarrage(stdscr):
 
   # Demande l'utulisateur pour son nom
   écran_info = curses.newwin(6, 105, 0, 0)
-  info_utulisateur = PoseText(écran_info, "Veuillez écrire votre prénom et votre année séparer par une espace:")
+  info_utulisateur = pose_texte(écran_info, "Veuillez écrire votre prénom et votre année séparer par une espace:")
   nom = info_utulisateur[0]
   année = info_utulisateur[1]
   
@@ -163,7 +163,7 @@ def Démarrage(stdscr):
 
   # Demande l'utulisateur à quelle difficulté il aimerait jouer
   question = "Choisir une difficulté:"
-  difficulté = PoseMultiple(stdscr, DIFFICULTÉS, question)
+  difficulté = pose_multiple(stdscr, DIFFICULTÉS, question)
 
   return DIFFICULTÉS.index(difficulté), nom, année
 
@@ -171,7 +171,7 @@ def Démarrage(stdscr):
   # Retourne l'index du difficulté choisi
 
 # Fonction appelée par main() pour imprimer la conclusion et finir le jeu
-def ÉcranFin(stdscr, erreurs, nom):
+def écran_fin(stdscr, erreurs, nom):
   
   WHITE_AND_YELLOW = curses.color_pair(1)
   WHITE_AND_GREEN = curses.color_pair(3)
@@ -199,7 +199,7 @@ def ÉcranFin(stdscr, erreurs, nom):
 
 
 # Fonction qui affiche les options et permette le selectionnement
-def ListeQuestions(écran_questions, ligne_sélectionnée, options):
+def liste_questions(écran_questions, ligne_sélectionnée, options):
   WHITE_AND_YELLOW = curses.color_pair(1)
 
   # Pour chaque question dans option
@@ -217,7 +217,7 @@ def ListeQuestions(écran_questions, ligne_sélectionnée, options):
   écran_questions.refresh()
 
 # Fonction qui pose une question à l'utulisateur à partir d'options
-def PoseMultiple(stdscr, options, question):
+def pose_multiple(stdscr, options, question):
   
   # Permettent que le programme puisse continuer à jouer quand l'utulisateur ne clique pas des boutons
   stdscr.nodelay(True)
@@ -270,7 +270,7 @@ def PoseMultiple(stdscr, options, question):
       ligne_sélectionnée += 1
 
     # Affiche les options selon la ligne_sélectionnée
-    ListeQuestions(écran_questions, ligne_sélectionnée, options)
+    liste_questions(écran_questions, ligne_sélectionnée, options)
 
     # Efface les options entre modification (pour qu'ils ne superimposent pas)
     écran_questions.clear()
@@ -280,7 +280,7 @@ def PoseMultiple(stdscr, options, question):
 
 # todo: fix having to click enter several times
 # Fonction qui pose l'utulisateur pour so nom et année d'étude
-def PoseText(écran, question):
+def pose_texte(écran, question):
 
 
   # Donne le curseur au utulisateur
@@ -318,7 +318,7 @@ def PoseText(écran, question):
 
 
 # todo: add comments
-def listeHasard(longeur, min, max): 
+def liste_hasard(longeur, min, max): 
   liste = []
   while longeur != 0:
     nombre_aléatoire = randint(min, max)
@@ -329,15 +329,15 @@ def listeHasard(longeur, min, max):
   return liste
 
 # todo: add comments
-def mergeSort(list, croissant):
+def merge_sort(list, croissant):
   if len(list) <= 1:
     return list
 
   middle = len(list) // 2
   leftList = list[:middle]
   rightList = list[middle:]
-  leftList = mergeSort(leftList, croissant)
-  rightList = mergeSort(rightList, croissant)
+  leftList = merge_sort(leftList, croissant)
+  rightList = merge_sort(rightList, croissant)
   return merge(leftList, rightList, croissant)
   
 
@@ -376,7 +376,7 @@ def merge(leftList, rightList, croissant):
 
   return merged_list
 
-def formatList(liste):
+def format_liste(liste):
   liste_formatted = ""
   for i in range(len(liste)):
     if i != len(liste) - 1:
@@ -387,7 +387,7 @@ def formatList(liste):
   return liste_formatted
 
 # todo: translate comments into french
-def print_ascii_art(screen, jeu):
+def imprime_art(screen, jeu):
   # Define starting position (y, x)
   y = 1  # Start from the second row (avoiding the top line)
   x = 5   # Adjust this for desired horizontal centering
@@ -447,7 +447,7 @@ def print_ascii_art(screen, jeu):
     screen.addstr(y, x, line)
     y += 1
 
-def VérifieRéponse(réponse, bonne_réponse, écran_retroaction):
+def vérifie_réponse(réponse, bonne_réponse, écran_retroaction):
   WHITE_AND_RED = curses.color_pair(2)
   WHITE_AND_GREEN = curses.color_pair(3)
  # Si la réponse de l'utilisateur est la bonne réponse
@@ -481,6 +481,7 @@ def VérifieRéponse(réponse, bonne_réponse, écran_retroaction):
       écran_retroaction.addstr(f"Mauvaise Réponse! La réponse était {bonne_réponse}.", WHITE_AND_RED | curses.A_BOLD)
     
     écran_retroaction.refresh()
+    # todo: replace this for smt more case specific
     time.sleep(4)
 
 

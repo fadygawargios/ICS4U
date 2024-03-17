@@ -12,9 +12,9 @@
 # *RAPPEL que le module curses ne fonctionnent pas dans votre line de commande, svp intaller git bash: https://git-scm.com/download/win
 
 
-from fonctions import Démarrage, ÉcranFin
+from fonctions import démarrage, écran_fin
 import curses
-from jeux import ÉnigmeNationale, PingouinsDuTri
+from jeux import énigme_nationale, pingouins_du_tri
 from common import * 
 
 # stdscr -> «Standard Screen» que Curses va afficher au dessus du line de commande
@@ -30,7 +30,7 @@ def main(stdscr):
 
   # Appelle la fonction de démarrage pour choisir la difficulté
   # todo: make sure user put int for année 
-  difficulté, nom, année = Démarrage(stdscr)
+  difficulté, nom, année = démarrage(stdscr)
 
   # Établit l'objectif nécessaire en fonction de la difficulté choisie
   if difficulté == FACILE:
@@ -46,14 +46,14 @@ def main(stdscr):
   écran_retroaction = curses.newwin(10, largeur - 1, 6, 0)
 
   if année in [1, 2]:
-    erreurs = PingouinsDuTri(stdscr, objectif, écran_retroaction)
+    erreurs = pingouins_du_tri(stdscr, objectif, écran_retroaction)
   elif année in [3, 4]:
-    erreurs = ÉnigmeNationale(stdscr, objectif, écran_retroaction)
+    erreurs = énigme_nationale(stdscr, objectif, écran_retroaction)
 
     
   
   # Affiche l'écran de fin
-  ÉcranFin(stdscr, erreurs, nom)
+  écran_fin(stdscr, erreurs, nom)
   
 
 
