@@ -28,6 +28,7 @@ def main(stdscr):
   curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_GREEN)
 
   # Appelle la fonction de démarrage pour choisir la difficulté
+  # todo: make sure user put int for année 
   difficulté, année = Démarrage(stdscr)
 
   # Établit l'objectif nécessaire en fonction de la difficulté choisie

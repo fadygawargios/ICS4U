@@ -4,6 +4,7 @@ import curses
 from curses.textpad import Textbox, rectangle
 import pygetwindow as gw
 from random import randint
+import time
 
 # Définit la constante des trois difficultés possibles
 DIFFICULTÉS = ["Facile", "Moyenne", "Difficile"]
@@ -247,20 +248,19 @@ def PoseText(écran, question):
 
   # Tandis que l'utulisateur n'appuie pas ENTER, permet lui d'écrire
   touche = None
-  while touche != ENTER: 
-    try:
-      touche = écran_texte.getch()
-    except:
-      touche = None
-  
+  while touche != ENTER:
     endroit_texte.edit()
+    touche = écran_texte.getch()
+    
+ 
 
   # Prend l'info du endroite_texte
   infos = endroit_texte.gather()
-  # todo: add comments
+  
+  # todo: add comments to explain what this does
   info_list = infos.split(" ")
 
-  # Retourne les informations
+  # Retourne les informations en forme de liste
   return info_list
 
 
@@ -272,19 +272,19 @@ def listeHasard(longeur, min, max):
   return liste
 
 # todo: add comments
-def mergeSort(list):
+def mergeSort(list, croissant):
   if len(list) <= 1:
     return list
 
   middle = len(list) // 2
   leftList = list[:middle]
   rightList = list[middle:]
-  leftList = mergeSort(leftList)
-  rightList = mergeSort(rightList)
-  return merge(leftList, rightList)
+  leftList = mergeSort(leftList, croissant)
+  rightList = mergeSort(rightList, croissant)
+  return merge(leftList, rightList, croissant)
   
 
-def merge(leftList, rightList):
+def merge(leftList, rightList, croissant):
   merged_list = []
   left_length = len(leftList)
   right_length = len(rightList)
@@ -292,13 +292,20 @@ def merge(leftList, rightList):
   r = 0
 
   while l < left_length and r < right_length:
-    if leftList[l] < rightList[r]:
-      merged_list.append(leftList[l])
-      l += 1
-
+    if croissant == True:
+      if leftList[l] < rightList[r]:
+        merged_list.append(leftList[l])
+        l += 1
+      else:
+        merged_list.append(rightList[r])
+        r += 1
     else:
-      merged_list.append(rightList[r])
-      r += 1
+      if leftList[l] > rightList[r]:
+        merged_list.append(leftList[l])
+        l += 1
+      else:
+        merged_list.append(rightList[r])
+        r += 1
 
   # the remaining number if the list arent the same size
   while l < left_length:

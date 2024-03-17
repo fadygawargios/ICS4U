@@ -88,13 +88,25 @@ def PingouinsDuTri(stdscr, objectif, écran_retroaction):
   print_ascii_art(stdscr)
   stdscr.refresh()
   stdscr.getch()
+  
+  # Définit les points à 0
+  points = 0
 
-  points = 0 
+  # Montant d'erreurs que l'utulisateur a fait
+  erreurs = 0
 
+  # Lorsque l'utulisateur n'a pas atteint l'objectif de point
   while points != objectif:
     liste_nonTriée = listeHasard(longeur=5, min=0, max=10)
     stdscr.clear()
-    question = "Met la suite de nombre suivante en ordre croissant: " + formatList(liste_nonTriée)
+    if points % 2 == 0:
+      question = "Met la suite de nombre suivante en ordre croissant: " + formatList(liste_nonTriée)
+      list_triée = mergeSort(liste_nonTriée, croissant=True)
+    else:
+      question = "Met la suite de nombre suivante en ordre décroissant: " + formatList(liste_nonTriée)
+      list_triée = mergeSort(liste_nonTriée, croissant=False)
+
+
     réponse = PoseText(stdscr, question)
     
     réponse_formatted = []
@@ -103,10 +115,10 @@ def PingouinsDuTri(stdscr, objectif, écran_retroaction):
       if nombre != "":
         réponse_formatted.append(int(nombre.replace(",", "")))
 
-    liste_triée = mergeSort(liste_nonTriée)
+    
 
     # todo: try to break this...what if you input chars or idkk
-    résultat = VérifieRéponse(réponse_formatted, liste_triée, écran_retroaction)
+    résultat = VérifieRéponse(réponse_formatted, list_triée, écran_retroaction)
     
     if résultat == False:
       erreurs += 1
