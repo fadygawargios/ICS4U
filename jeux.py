@@ -2,8 +2,6 @@ from common import *
 from PIL import Image
 from fonctions import pose_multiple, ferme_image, obtenir_options, liste_hasard, format_liste, pose_texte, merge_sort, imprime_art, vérifie_réponse, intro_jeu
 import time
-import curses
-
 
 def énigme_nationale(stdscr, objectif, écran_retroaction):
 

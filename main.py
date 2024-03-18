@@ -20,8 +20,6 @@ from common import *
 # stdscr -> «Standard Screen» que Curses va afficher au dessus du line de commande
 def main(stdscr):
   
-  # todo: make these french
-
   # Crée des paires de couleurs pour la ligne de commande
   # Paramètres: curses.init_pair(id, curses.COULEUR_TEXTE, curses.COULEUR_ARRIERE_PLAN)
   curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_YELLOW)

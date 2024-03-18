@@ -13,9 +13,6 @@ DIFFICULTÉS = ["Facile", "Moyenne", "Difficile"]
 # Définit la constante du touche ENTER en ASCII
 ENTER = 10
 
-
-# todo: **LES FONCTIONS DOIVENT UTULISER LA MEME NOTATION (camelCase ou snake_case)
-
 # Fonction qui crée des options, un sous-liste aléatoire d'une liste passée
 def obtenir_options(list):
 
@@ -90,7 +87,7 @@ def fichier_vers_nom(file):
 # Fonction appelée par main() pour imprimer l'introduction et commencer le jeu
 def démarrage(stdscr):
 
-  WHITE_AND_YELLOW = curses.color_pair(1)
+  BLANC_ET_JAUNE = curses.color_pair(1)
   # Assure qu'il y aura un délai jusqu'à l'utulisateur appuie un bouton
   stdscr.nodelay(False)
 
@@ -100,41 +97,54 @@ def démarrage(stdscr):
   # Enleve tout sur l'écran standard avant d'imprimer les messages d'introduction
   # Paramètres: stdscr.addstr(position_y, position_x, "str du message", attribue_1 | attribue_2)
   stdscr.clear()
-  stdscr.addstr(1, 0, "Bienvenu aux jeux éducatives :)", WHITE_AND_YELLOW | curses.A_BOLD)
-  # todo: work on prompts and explanations
-  
+  stdscr.addstr(1, 0, "Bienvenu aux jeux éducatives :)", BLANC_ET_JAUNE | curses.A_BOLD)
+
+  # Explique les jeux possible selon l'age de l'utulisateur
   stdscr.addstr(2, 0, "Selon votre année scolaire, vous allez être assigner un jeux:")
   stdscr.addstr(3, 0, "1e-2e année : ", curses.A_BOLD)
-  stdscr.addstr(3, 15, "PINGOUINS DU TRI", WHITE_AND_YELLOW | curses.A_BOLD)
+  stdscr.addstr(3, 15, "PINGOUINS DU TRI", BLANC_ET_JAUNE | curses.A_BOLD)
   stdscr.addstr(4, 0, "3e-4e année : ", curses.A_BOLD)
-  stdscr.addstr(4, 15, "ÉNIGME NATIONALE", WHITE_AND_YELLOW | curses.A_BOLD)
+  stdscr.addstr(4, 15, "ÉNIGME NATIONALE", BLANC_ET_JAUNE | curses.A_BOLD)
+
+  # Explique comment démarer le programme
   stdscr.addstr(5, 0, "Cliquez sur n'importe quelle bouton pour commencer!")
+  
+  # Fait un refresh à l'écran pour afficher les changements
   stdscr.refresh()
+  
+  # Attend pour n'importe quelle clique de boutton
   stdscr.getch()
+  
+  # Efface l'écran
   stdscr.clear()
 
-  # Demande l'utulisateur pour son nom
+  # todo: replace with pose multiple for année
+  # Demande l'utulisateur pour son nom...
   écran_info = curses.newwin(6, 105, 0, 0)
   info_utulisateur = pose_texte(écran_info, "Veuillez écrire votre prénom et votre année séparer par une espace:")
   nom = info_utulisateur[0]
   année = info_utulisateur[1]
   
-  # todo: add comments
+  # Assure qu'il y aura un délai jusqu'à l'utulisateur appuie un bouton
   stdscr.nodelay(False)
 
+  # Supprime toute valeur non numérique dans l'entrée (ex: 12iéme -> 12)
   for char in année:
     if not char.isnumeric():
       année = année.strip(char)
 
+  # Assure que l'utulisateur à rééllement inscrit son année d'étude
   if année == None or année == "":
     stdscr.clear()
-    # todo: shorten this line
+    # sinon, message d'explication:
     stdscr.addstr("Malheureusement, sans préciser une année, nous ne sommes pas en mesure de vous jumeler à un jeu.")
     stdscr.refresh()
+    # Attend pour un touche comme confirmation
     stdscr.getch()
+    # Sort du programme avec code 1: erreur
     sys.exit(1)
 
-
+  # Essaie de conventir l'année en int
   try: 
     année = int(année)
   except ValueError:
@@ -143,19 +153,24 @@ def démarrage(stdscr):
   # Si l'utulisateur est trop vieux ou jeune pour jouer
   if année > 4 or année < 1:
     stdscr.clear()
+
+    # Explique le
     stdscr.addstr(0, 0, "Vous n'avez pas l'âge requis pour jouer au jeu proposé!")
     stdscr.addstr(1, 0, f"Vous êtes en {année}e, mais devez être entre la 1e et la 4e année pour jouer.", curses.A_BOLD)
     stdscr.refresh()
+
+    # Attend pour un touche comme confirmation
     stdscr.getch()
+    # Sort du programme avec code 1: erreur
     sys.exit(1)
 
-
+  # Accueille l'utilisateur par nom et explique les difficultés
   stdscr.addstr(0, 0, f"Salut {nom}")
   stdscr.addstr(2, 0, "SVP cliquer un bouton pour choisir une difficulté.")
   stdscr.addstr(3, 0, "En mode facile vous aurez besoin de 5 points, en mode moyenne, 10 points et mode difficile, 15 points pour gagner!")
   stdscr.addstr(5, 0, "ATTENTION:", curses.A_STANDOUT)
   stdscr.addstr(5, 11, "Vous perdez des points si vous répondez mal! Bonne chance!")
-  # Fait un refresh à l'écrain pour afficher les changements
+  # Fait un refresh à l'écran pour afficher les changements
   stdscr.refresh()
 
   # Attend pour n'importe quelle clique de boutton
@@ -165,16 +180,15 @@ def démarrage(stdscr):
   question = "Choisir une difficulté:"
   difficulté = pose_multiple(stdscr, DIFFICULTÉS, question)
 
+  # Retourne l'index du difficulté choisi, le nom et l'année de l'utulisateur en liste
   return DIFFICULTÉS.index(difficulté), nom, année
 
-  
-  # Retourne l'index du difficulté choisi
 
 # Fonction appelée par main() pour imprimer la conclusion et finir le jeu
 def écran_fin(stdscr, erreurs, nom):
   
-  WHITE_AND_YELLOW = curses.color_pair(1)
-  WHITE_AND_GREEN = curses.color_pair(3)
+  BLANC_ET_JAUNE = curses.color_pair(1)
+  BLANC_ET_VERT = curses.color_pair(3)
 
   # Assure qu'il y aura un délai jusqu'à l'utulisateur appuie un bouton
   stdscr.nodelay(False)
@@ -184,12 +198,11 @@ def écran_fin(stdscr, erreurs, nom):
 
   # Imprime la conclusion à travers 3 lignes
   nom = nom.upper()
-  stdscr.addstr(f"BRAVO {nom}!! VOUS AVEZ GAGNER!!", WHITE_AND_GREEN)
+  stdscr.addstr(f"BRAVO {nom}!! VOUS AVEZ GAGNER!!", BLANC_ET_VERT)
   stdscr.addstr(1,0, f"Vous avez faite {erreurs} erreurs.")
   stdscr.addstr(2,0,  "Pour fermer le jeu, appuyer")
   stdscr.addstr(2, 28, "ENTER", curses.A_STANDOUT)
-  stdscr.addstr(3, 0, "Merci d'avoir jouer :)", WHITE_AND_YELLOW)
-
+  stdscr.addstr(3, 0, "Merci d'avoir jouer :)", BLANC_ET_JAUNE)
 
   # Affiche la conclusion
   stdscr.refresh()
@@ -200,14 +213,14 @@ def écran_fin(stdscr, erreurs, nom):
 
 # Fonction qui affiche les options et permette le selectionnement
 def liste_questions(écran_questions, ligne_sélectionnée, options):
-  WHITE_AND_YELLOW = curses.color_pair(1)
+  BLANC_ET_JAUNE = curses.color_pair(1)
 
   # Pour chaque question dans option
   for indice_question in range(len(options)):
   # Si la question est séléctionné
     if ligne_sélectionnée == indice_question:
       # Écrit le en couleur sur une différent ligne (celui qui correspon à indice question)
-      écran_questions.addstr(indice_question, 0, f"{indice_question + 1}.{options[indice_question]}", WHITE_AND_YELLOW)
+      écran_questions.addstr(indice_question, 0, f"{indice_question + 1}.{options[indice_question]}", BLANC_ET_JAUNE)
   
     # Sinon imprime le sans couleur
     else:
@@ -278,10 +291,8 @@ def pose_multiple(stdscr, options, question):
   # Retourne l'option sélectionné quand l'utulisateur à cliqué ENTER
   return options[ligne_sélectionnée]
 
-# todo: fix having to click enter several times
 # Fonction qui pose l'utulisateur pour so nom et année d'étude
 def pose_texte(écran, question):
-
 
   # Donne le curseur au utulisateur
   curses.curs_set(1)
@@ -309,93 +320,125 @@ def pose_texte(écran, question):
     
   # Prend l'info du endroite_texte
   infos = endroit_texte.gather()
-  
-  # todo: add comments to explain what this does
+
+  # Sépare le réponse de l'utulisateur en une liste de valeur à partir des espaces blanches 
   info_list = infos.split(" ")
 
-  # Retourne les informations en forme de liste
+  # Retourne la liste d'informations
   return info_list
 
 
-# todo: add comments
+# Crée une liste avec une certaine longeur, contenant des nombres au hasard entre min et max
 def liste_hasard(longeur, min, max): 
   liste = []
+
+  # Lorsque la longeur désirée n'est pas atteint
   while longeur != 0:
+    # Cherche un nombre aléatoire
     nombre_aléatoire = randint(min, max)
+    # Si le nombre n'a pas était déja utulisé pour cette question
     if nombre_aléatoire not in liste:
+      # Ajoute le au liste
       liste.append(nombre_aléatoire)
+      # Soustrais du longeur parce qu'on vient de chercher un nombre
       longeur -= 1
       
   return liste
 
-# todo: add comments
-def merge_sort(list, croissant):
-  if len(list) <= 1:
-    return list
-
-  middle = len(list) // 2
-  leftList = list[:middle]
-  rightList = list[middle:]
-  leftList = merge_sort(leftList, croissant)
-  rightList = merge_sort(rightList, croissant)
-  return merge(leftList, rightList, croissant)
+# Algorithmes de tri du type «Divide & Conquer»
+def merge_sort(liste, croissant):
   
+  # Cas de base (s'il n'y est plus possibile de subdiviser)
+  if len(liste) <= 1:
+    return liste
 
-def merge(leftList, rightList, croissant):
-  merged_list = []
-  left_length = len(leftList)
-  right_length = len(rightList)
+  # Trouve l'élément à peu prés au milieu de la liste (pas exactement s'il y a un nombre impair)
+  middle = len(liste) // 2
+  # Subdivise la liste originale en deux 
+  liste_gauche = liste[:middle]
+  liste_droite = liste[middle:]
+  # Subdivision récursive
+  liste_gauche = merge_sort(liste_gauche, croissant)
+  liste_droite = merge_sort(liste_droite, croissant)
+  # Fusion de tout les parties de la liste (chaqun un est déja triée)
+  return merge(liste_gauche, liste_droite, croissant)
+  
+# Fusionnent deux listes (la fonction qui fait les compairasons: < et >)
+def merge(liste_gauche, liste_droite, croissant):
+
+  # Définie les variables intiales
+  liste_fusionnée = []
+  longeur_gauche = len(liste_gauche)
+  longeur_droite = len(liste_droite)
   l = 0
   r = 0
 
-  while l < left_length and r < right_length:
+  # Tandis qu'il ya des éléments dans n'importe quel liste
+  while l < longeur_gauche and r < longeur_droite:
+    # Si la fonction doit trier par ordre croissant
     if croissant == True:
-      if leftList[l] < rightList[r]:
-        merged_list.append(leftList[l])
+      # Si l'élément du liste gauche est plus petit 
+      if liste_gauche[l] < liste_droite[r]:
+        # Ajoute le au liste triée
+        liste_fusionnée.append(liste_gauche[l])
+        # Bouge de un dans la liste gauche (puisque on vient de bien triée la valeur)
         l += 1
+       # Si l'élément du liste droite est plus petit ou s'ils sont du meme taille
       else:
-        merged_list.append(rightList[r])
+        # Ajoute celui du liste droite
+        liste_fusionnée.append(liste_droite[r])
+        # Bouge de un dans la liste droite (puisque on vient de bien triée la valeur)
         r += 1
+    # Si la fonction doit trier par ordre décroissant
     else:
-      if leftList[l] > rightList[r]:
-        merged_list.append(leftList[l])
+      # Signe inverse, on ajoute l'élément le plus grand en premier
+      if liste_gauche[l] > liste_droite[r]:
+        liste_fusionnée.append(liste_gauche[l])
         l += 1
       else:
-        merged_list.append(rightList[r])
+        liste_fusionnée.append(liste_droite[r])
         r += 1
 
-  # the remaining number if the list arent the same size
-  while l < left_length:
-    merged_list.append(leftList[l])
+  # S'il reste des éléments dans la liste gauche
+  # puisque les listes ne sont pas toujours du meme taille s'il y a un nombre impaire d'éléments 
+  while l < longeur_gauche:
+    # Ajoute les
+    liste_fusionnée.append(liste_gauche[l])
     l += 1
   
-  # the remaining number if the list arent the same size
-  while r < right_length:
-    merged_list.append(rightList[r])
+  # S'il reste des éléments dans la liste droite
+  while r < longeur_droite:
+    liste_fusionnée.append(liste_droite[r])
     r += 1
 
-  return merged_list
+  # Retourne la liste fusionner et bien triée
+  return liste_fusionnée
 
+# Fonction qui rend les valeurs d'une liste plus user-friendly en le formattant en string 
 def format_liste(liste):
-  liste_formatted = ""
+  # String du liste à imprimer
+  liste_formattée = ""
+
+  # Ajoute les valeurs avec des virgules entre
   for i in range(len(liste)):
     if i != len(liste) - 1:
-      liste_formatted = liste_formatted + str(liste[i]) + ", "
+      liste_formattée = liste_formattée + str(liste[i]) + ", "
     else:
-      liste_formatted = liste_formatted + str(liste[i])
+      liste_formattée = liste_formattée + str(liste[i])
 
-  return liste_formatted
+  return liste_formattée
 
-# todo: translate comments into french
+# Fonction qui imprime de l'art ASCII pour les jeux
 def imprime_art(screen, jeu):
-  # Define starting position (y, x)
-  y = 1  # Start from the second row (avoiding the top line)
-  x = 5   # Adjust this for desired horizontal centering
+  # Définie les cordonnée intiales de l'art
+  y = 1  
+  x = 5   
 
+  # Définie la piéce d'art selon le jeu
   # sources: https://ascii.co.uk/art
+  # JEU 1: Énigme Nationale
   if jeu == 1:
-      # Define the ASCII art lines
-    art_lines = [
+    liste_art = [
       ".. . . . . . . . . . . . . . . . . . . . . . . . . . . . .",
       ".. . . . . . . .#######. . . . . . . . . . . . . . . . .",
       ".. . . . . . .#. .#### . . . ####. . .###############. . .",
@@ -410,8 +453,9 @@ def imprime_art(screen, jeu):
       ".. . . . . . ##. . . . . . . . . . . . . . . . . . . . . .",
       ".. . . . . . . . . . . . . . . . . . . . . . . . . . . . ."
   ]
+  # JEU 2: Pingouins du Tri
   else:
-    art_lines = [
+    liste_art = [
         "",
         "                 .88888888:.",
         "                88888888.88888.",
@@ -442,54 +486,80 @@ def imprime_art(screen, jeu):
         " "
     ]
 
-  # Print each line of art with increasing y-value
-  for line in art_lines:
-    screen.addstr(y, x, line)
+  # Imprime chaque ligne du liste sur une différent ligne dans la ligne de commande
+  for ligne in liste_art:
+    screen.addstr(y, x, ligne)
     y += 1
 
+# Fonction qui vérifie si l'utulisateur à bien réondu et fourni de la rétroaction sinon
 def vérifie_réponse(réponse, bonne_réponse, écran_retroaction):
-  WHITE_AND_RED = curses.color_pair(2)
-  WHITE_AND_GREEN = curses.color_pair(3)
+  BLANC_ET_ROUGE = curses.color_pair(2)
+  BLANC_ET_VERT = curses.color_pair(3)
+
  # Si la réponse de l'utilisateur est la bonne réponse
   if str(réponse) == str(bonne_réponse):
 
     # Imprime la rétroaction sur le window «écran_retroaction»
     écran_retroaction.clear()
-    écran_retroaction.addstr(f"Bonne Réponse! Bravo!", WHITE_AND_GREEN | curses.A_BOLD)
+    écran_retroaction.addstr(f"Bonne Réponse! Bravo!", BLANC_ET_VERT | curses.A_BOLD)
     écran_retroaction.refresh()
     
+    # Retourne Vrai pour augmenter le nombre de points
     return True
 
+  # Sinon
   else:
-
-    # Imprime la rétroaction sur le window «écran_retroaction»
+    
     écran_retroaction.clear()
     
-    # gives retroaction
+    # Si la bonne réponse est du type liste (partie du jeu de tri)
     if type(bonne_réponse) == list:
+      # Donne l'utulisateur 5 secondes pour vérifier leur rétroaction
       temps_rétroaction = 5
+      
+      # Imprime la bonne réponse sans les paranthéses des listes
       bonne_réponse_str = str(bonne_réponse).strip("[]")
-      écran_retroaction.addstr(0, 0, f"Mauvaise Réponse! La réponse était {bonne_réponse_str}.", WHITE_AND_RED | curses.A_BOLD)
-      écran_retroaction.addstr(1, 0, "Voici les erreurs dans votre réponse:")
+      écran_retroaction.addstr(0, 0, f"Mauvaise Réponse! La réponse était {bonne_réponse_str}.", BLANC_ET_ROUGE | curses.A_BOLD)
 
-      for num_index in range(5):
-        if réponse[num_index] != bonne_réponse[num_index]:
-            écran_retroaction.addstr(1, 38 + (num_index * 3), f"{réponse[num_index]}", WHITE_AND_RED)
-        else:
-          écran_retroaction.addstr(1, 38 + (num_index * 3), f"{réponse[num_index]}")
+      # Donne de la rétroaction
+      écran_retroaction.addstr(1, 0, "Voici les erreurs dans votre réponse:")
     
+      # Si l'utulisateur a mis trop de nombres
+      if len(réponse) > 5:
+        écran_retroaction.addstr(1, 38, "Vous avez mis trop d'éléments.")
+      # Si l'utulisateur n'a pas mis assez de nombres
+      elif len(réponse) < 5:
+        écran_retroaction.addstr(1, 38, "Vous n'avez pas fourni assez d'éléments.")
+      # Si l'utulisateur a bien mis 5 nombres
+      else:
+        # Vérifie chacun
+        for num_index in range(5):
+          # S'il n'est pas correcte, souligne le en rouge
+          if réponse[num_index] != bonne_réponse[num_index]:
+              écran_retroaction.addstr(1, 38 + (num_index * 3), f"{réponse[num_index]}", BLANC_ET_ROUGE)
+          # Sinon, imprime le normalement
+          else:
+            écran_retroaction.addstr(1, 38 + (num_index * 3), f"{réponse[num_index]}")
+
+    # Si la réponse n'est pas du type liste (partie du jeu ÉnigmeNationale)  
     else:
+      # Réduit le temps de rétroaction
       temps_rétroaction = 0.5
-      écran_retroaction.addstr(f"Mauvaise Réponse! La réponse était {bonne_réponse}.", WHITE_AND_RED | curses.A_BOLD)
+      # Imprime tout simplement la bonne réponse
+      écran_retroaction.addstr(f"Mauvaise Réponse! La réponse était {bonne_réponse}.", BLANC_ET_ROUGE | curses.A_BOLD)
     
+    # Donne l'utulisateur le temps de vérifier la rétroaction
     écran_retroaction.refresh()
     time.sleep(temps_rétroaction)
 
+    # Retourne faux puisqu'il a mal répondu à la question
     return False
 
+# Fonction qui débute un jeu
 def intro_jeu(stdscr, espace, jeu):
-  WHITE_AND_YELLOW = curses.color_pair(1)
+  BLANC_ET_JAUNE = curses.color_pair(1)
 
+  # Établit les informations nécessaires selon le jeu
   if jeu == 1:
     nom = "ÉNIGME NATIONALE!!"
     description_ligne_1 = "Dans ce jeu, vous allez devoir identifier le nom"
@@ -499,19 +569,24 @@ def intro_jeu(stdscr, espace, jeu):
     description_ligne_1 = "Dans ce jeu, vous allez devoir mettre des suites de"
     description_ligne_2 = "nombres en ordre croissant et décroissant."
 
-  
+  # Assure qu'il y aura un délai jusqu'à l'utulisateur appuie un bouton
   stdscr.nodelay(False)
+  
+  # Imprime un message de bienvenu, une courte description et des consignes pour commencer
   stdscr.clear()
   stdscr.addstr(5, espace, "BIENVENU À", curses.A_BOLD)
-  stdscr.addstr(5, espace + 11, f"{nom}", WHITE_AND_YELLOW | curses.A_BOLD)
+  stdscr.addstr(5, espace + 11, f"{nom}", BLANC_ET_JAUNE | curses.A_BOLD)
   stdscr.addstr(6, espace, f"{description_ligne_1}")
   stdscr.addstr(7, espace, f"{description_ligne_2}")
   stdscr.addstr(8, espace, "Cliquez sur n'importe quelle bouton pour commencer!")
   
+  # Imrpime l'art ASCII coresspondant au jeu
   if jeu == 1:
     imprime_art(stdscr, jeu=1)
   else:
     imprime_art(stdscr, jeu=2)
 
   stdscr.refresh()
+
+  # Attend l'entrée de l'utilisateur avant de passer au jeu
   stdscr.getch()
