@@ -556,15 +556,28 @@ def vérifie_réponse(réponse, bonne_réponse, écran_retroaction):
     return False
 
 # Fonction qui débute un jeu
-def intro_jeu(stdscr, espace, jeu):
+def intro_jeu(stdscr, jeu):
+
+  # Assigne les possibilités des jeux à des constantes
+  ÉNIGME_NATIONALE = 1
+  PINGOUINS_DU_TRI = 2
+
+  # id d'un couleur à utuliser plus tard
   BLANC_ET_JAUNE = curses.color_pair(1)
 
-  # Établit les informations nécessaires selon le jeu
-  if jeu == 1:
+  # Établit les informations nécessaires selon le jeu:
+
+  if jeu == ÉNIGME_NATIONALE:
+    # Espace s'agit de l'espace à laisser avant les message pour l'art ASCII
+    espace = 65
+    # nom du jeu
     nom = "ÉNIGME NATIONALE!!"
+    # courte description de l'objectif du jeu séparer en deux lignes 
     description_ligne_1 = "Dans ce jeu, vous allez devoir identifier le nom"
     description_ligne_2 = "d'un pays à partir d'un drapeau ou d'une carte mondiale."
-  else:
+  
+  if jeu == PINGOUINS_DU_TRI:
+    espace = 50
     nom = "PINGOUINS DU TRI!!"
     description_ligne_1 = "Dans ce jeu, vous allez devoir mettre des suites de"
     description_ligne_2 = "nombres en ordre croissant et décroissant."
@@ -581,10 +594,10 @@ def intro_jeu(stdscr, espace, jeu):
   stdscr.addstr(8, espace, "Cliquez sur n'importe quelle bouton pour commencer!")
   
   # Imrpime l'art ASCII coresspondant au jeu
-  if jeu == 1:
-    imprime_art(stdscr, jeu=1)
+  if jeu == ÉNIGME_NATIONALE:
+    imprime_art(stdscr, jeu=ÉNIGME_NATIONALE)
   else:
-    imprime_art(stdscr, jeu=2)
+    imprime_art(stdscr, jeu=PINGOUINS_DU_TRI)
 
   stdscr.refresh()
 

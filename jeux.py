@@ -1,11 +1,12 @@
 from common import * 
 from PIL import Image
-from fonctions import pose_multiple, ferme_image, obtenir_options, liste_hasard, format_liste, pose_texte, merge_sort, imprime_art, vérifie_réponse, intro_jeu
+from fonctions import pose_multiple, ferme_image, obtenir_options, liste_hasard, format_liste, pose_texte, merge_sort, vérifie_réponse, intro_jeu
 import time
 
 def énigme_nationale(stdscr, objectif, écran_retroaction):
 
-  intro_jeu(stdscr, espace=65, jeu=1)
+  # Salue l'utulisateur au jeu 1: Énigme Nationale et imprime l'art ASCII correspondant
+  intro_jeu(stdscr, jeu=1)
   
   # Définit les points à 0
   points = 0
@@ -44,29 +45,36 @@ def énigme_nationale(stdscr, objectif, écran_retroaction):
     # Ferme l'image (pour qu'ils ne s'accumulent pas)
     ferme_image()
 
-    # todo: add comments
+    # Compare le choix de l'utulisateur avec la bonne réponse et retourne un bool (vrai ou faux) correspondant
     résultat = vérifie_réponse(réponse, options[index_bonne_réponse], écran_retroaction)
     
+    # Si l'tuulisateur a mal répondu
     if résultat == False:
+      # Il a faite une erreur de plus
       erreurs += 1
-
+      # Et si ses points ne sont pas déja 0
       if points != 0:
+        # Soustrais un de son score
         points -= 1
+    # Si l'utulisateur a bien répondu
     else:
+      # Donne lui un point
       points += 1
+
     # Affiche les changements de points
     écran_retroaction.addstr(1, 0, f"Points: {points}")
     écran_retroaction.refresh()
 
+  # Retourne le nombre d'erreurs commit pour imprimer à l'écran
   return erreurs
 
 
-#  Description: Dans YYY, l'élève de la 1e à la 2e devra
+#  Description: Dans YYY, l'élève de la 1e à la 2e devra...
 
-# todo: add comments
 def pingouins_du_tri(stdscr, objectif, écran_retroaction):
   
-  intro_jeu(stdscr, espace=50, jeu=2)
+  # Salue l'utulisateur au jeu 2: Pingouins du tri et imprime l'art ASCII correspondant
+  intro_jeu(stdscr, jeu=2)
   
   # Définit les points à 0
   points = 0
@@ -76,36 +84,59 @@ def pingouins_du_tri(stdscr, objectif, écran_retroaction):
 
   # Lorsque l'utulisateur n'a pas atteint l'objectif de point
   while points != objectif:
-    liste_nonTriée = liste_hasard(longeur=5, min=1, max=100)
+    # Cherche une liste avec 5 ints aléatoires entre 1 et 100 (ce qui est non_triée)
+    liste_non_triée = liste_hasard(longeur=5, min=1, max=100)
+
+    # Efface l'écran (pour imprimer la question plus tard)
     stdscr.clear()
+    
+    # Si le pointage est paire
     if points % 2 == 0:
-      question = f"QUESTION #{points + 1}: Met la suite de nombre suivante en ordre CROISSANT: " + format_liste(liste_nonTriée)
-      list_triée = merge_sort(liste_nonTriée, croissant=True)
+      # Forme une question de tri par ordre croissant
+      question = f"QUESTION #{points + 1}: Met la suite de nombre suivante en ordre CROISSANT: " + format_liste(liste_non_triée)
+      
+      # Tri la liste_non_triée avec merge_sort en ordre croissant
+      list_triée = merge_sort(liste_non_triée, croissant=True)
+
+    # Si le pointage est impaire
     else:
-      question = f"QUESTION #{points + 1}: Met la suite de nombre suivante en ordre DÉCROISSANT: " + format_liste(liste_nonTriée)
-      list_triée = merge_sort(liste_nonTriée, croissant=False)
+      # Forme une question de tri par odre décroissant
+      question = f"QUESTION #{points + 1}: Met la suite de nombre suivante en ordre DÉCROISSANT: " + format_liste(liste_non_triée)
 
+      # Tri la liste en ordre décroissant (puisque croissant=False)
+      list_triée = merge_sort(liste_non_triée, croissant=False)
 
+    # Pose la question à l'utulisateur
     réponse = pose_texte(stdscr, question)
     
+    # Place les numéros des réponses des utilisateurs dans une liste sans espaces ni virgules
     réponse_formatted = []
-    
+  
     for nombre in réponse:
       if nombre != "":
         réponse_formatted.append(int(nombre.replace(",", "")))
 
-    # todo: try to break this...what if you input chars or idkk
+    # Vérifie si la question à était bien réussi, sinon, donne de la rétroaction sur «écran_rétroaction»
     résultat = vérifie_réponse(réponse_formatted, list_triée, écran_retroaction)
     
+    # Sinon
     if résultat == False:
+      # L'utulisateur a faite une erreur
       erreurs += 1
 
+      # Si ses points ne sont pas déja 0
       if points != 0:
+        # Enlève un
         points -= 1
+
+    # Si la question a était bien réussi
     else:
+      # Ajoute un point
       points += 1
+
     # Affiche les changements de points
     écran_retroaction.addstr(2, 0, f"Points: {points}")
     écran_retroaction.refresh()
+    # Donne du temps à l'utulisateur de voir les changements de points avant la question prochaine
     time.sleep(1.5)
   
