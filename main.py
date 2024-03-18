@@ -27,7 +27,6 @@ def main(stdscr):
   curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_GREEN)
 
   # Appelle la fonction de démarrage pour choisir la difficulté
-  # todo: make sure user put int for année 
   difficulté, nom, année = démarrage(stdscr)
 
   # Établit l'objectif nécessaire en fonction de la difficulté choisie
@@ -43,17 +42,15 @@ def main(stdscr):
   largeur = dimensions[1]
   écran_retroaction = curses.newwin(10, largeur - 1, 6, 0)
 
+  # Sélectionne le jeu correct en fonction de l'âge des utilisateurs
   if année in [1, 2]:
     erreurs = pingouins_du_tri(stdscr, objectif, écran_retroaction)
   elif année in [3, 4]:
     erreurs = énigme_nationale(stdscr, objectif, écran_retroaction)
 
-    
-  
-  # Affiche l'écran de fin
+  # Affiche l'écran de fin aprés la fin d'un des jeux
   écran_fin(stdscr, erreurs, nom)
   
-
 
 # Exécute la fonction principale avec Curses
 curses.wrapper(main)
