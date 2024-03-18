@@ -118,51 +118,39 @@ def démarrage(stdscr):
   # Efface l'écran
   stdscr.clear()
 
-  # todo: replace with pose multiple for année
-  # Demande l'utulisateur pour son nom...
+  # Demande l'utulisateur pour son nom dans un nouveau écran
   écran_info = curses.newwin(6, 105, 0, 0)
-  info_utulisateur = pose_texte(écran_info, "Veuillez écrire votre prénom et votre année séparer par une espace:")
+  info_utulisateur = pose_texte(écran_info, "Veuillez écrire votre prénom: ")
+  
+  # pose_texte retourne une liste d'information, le premier élément s'agit du nom fourni dans ce cas
   nom = info_utulisateur[0]
-  année = info_utulisateur[1]
+
+  # Établit la question et les groupes ages possibles
+  question = "En quelle année d'études êtes-vous?"
+  groupe_ages = ["| 1ère - 2ème année", "| 3e - 4e année", "| +5e année"]
+
+  année = pose_multiple(stdscr, groupe_ages, question)
   
   # Assure qu'il y aura un délai jusqu'à l'utulisateur appuie un bouton
   stdscr.nodelay(False)
 
-  # Supprime toute valeur non numérique dans l'entrée (ex: 12iéme -> 12)
-  for char in année:
-    if not char.isnumeric():
-      année = année.strip(char)
-
-  # Assure que l'utulisateur à rééllement inscrit son année d'étude
-  if année == None or année == "":
-    stdscr.clear()
-    # sinon, message d'explication:
-    stdscr.addstr("Malheureusement, sans préciser une année, nous ne sommes pas en mesure de vous jumeler à un jeu.")
-    stdscr.refresh()
-    # Attend pour un touche comme confirmation
-    stdscr.getch()
-    # Sort du programme avec code 1: erreur
-    sys.exit(1)
-
-  # Essaie de conventir l'année en int
-  try: 
-    année = int(année)
-  except ValueError:
-    année = None
-    
-  # Si l'utulisateur est trop vieux ou jeune pour jouer
-  if année > 4 or année < 1:
+  # Si l'utulisateur est trop vieux pour jouer
+  if "+5" in année: 
     stdscr.clear()
 
     # Explique le
-    stdscr.addstr(0, 0, "Vous n'avez pas l'âge requis pour jouer au jeu proposé!")
-    stdscr.addstr(1, 0, f"Vous êtes en {année}e, mais devez être entre la 1e et la 4e année pour jouer.", curses.A_BOLD)
+    stdscr.addstr(0, 0, "Malheureusement, vous êtes trop vieux pour jouer aux jeux disponibles.", curses.A_BOLD)
+    stdscr.addstr(1, 0, "Cliquez sur n'importe quelle bouton pour terminer.")
     stdscr.refresh()
 
     # Attend pour un touche comme confirmation
     stdscr.getch()
-    # Sort du programme avec code 1: erreur
-    sys.exit(1)
+
+    # Sort du programme avec code 0: aucun erreur
+    sys.exit(0)
+
+  # Efface la question pour imprimer l'accueille
+  stdscr.clear()
 
   # Accueille l'utilisateur par nom et explique les difficultés
   stdscr.addstr(0, 0, f"Salut {nom}")
@@ -170,11 +158,15 @@ def démarrage(stdscr):
   stdscr.addstr(3, 0, "En mode facile vous aurez besoin de 5 points, en mode moyenne, 10 points et mode difficile, 15 points pour gagner!")
   stdscr.addstr(5, 0, "ATTENTION:", curses.A_STANDOUT)
   stdscr.addstr(5, 11, "Vous perdez des points si vous répondez mal! Bonne chance!")
+  
   # Fait un refresh à l'écran pour afficher les changements
   stdscr.refresh()
-
-  # Attend pour n'importe quelle clique de boutton
+  
+  # Attend pour un touche avant de procéder
+  stdscr.nodelay(False)
   stdscr.getch()
+
+  stdscr.clear()
 
   # Demande l'utulisateur à quelle difficulté il aimerait jouer
   question = "Choisir une difficulté:"

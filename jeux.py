@@ -137,6 +137,10 @@ def pingouins_du_tri(stdscr, objectif, écran_retroaction):
     # Affiche les changements de points
     écran_retroaction.addstr(2, 0, f"Points: {points}")
     écran_retroaction.refresh()
+    
     # Donne du temps à l'utulisateur de voir les changements de points avant la question prochaine
     time.sleep(1.5)
+
+  # Retourne le nombre d'erreurs commit pour imprimer à l'écran
+  return erreurs
   

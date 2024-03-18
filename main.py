@@ -43,9 +43,9 @@ def main(stdscr):
   écran_retroaction = curses.newwin(10, largeur - 1, 6, 0)
 
   # Sélectionne le jeu correct en fonction de l'âge des utilisateurs
-  if année in [1, 2]:
+  if "1ère - 2ème année" in année:
     erreurs = pingouins_du_tri(stdscr, objectif, écran_retroaction)
-  elif année in [3, 4]:
+  else:
     erreurs = énigme_nationale(stdscr, objectif, écran_retroaction)
 
   # Affiche l'écran de fin aprés la fin d'un des jeux
