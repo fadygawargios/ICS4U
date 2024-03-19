@@ -97,14 +97,14 @@ def démarrage(stdscr):
   # Enleve tout sur l'écran standard avant d'imprimer les messages d'introduction
   # Paramètres: stdscr.addstr(position_y, position_x, "str du message", attribue_1 | attribue_2)
   stdscr.clear()
-  stdscr.addstr(1, 0, "Bienvenu aux jeux éducatives :)", BLANC_ET_JAUNE | curses.A_BOLD)
+  stdscr.addstr(0, 0, "Bienvenu aux jeux éducatives :)", BLANC_ET_JAUNE | curses.A_BOLD)
 
   # Explique les jeux possible selon l'age de l'utulisateur
-  stdscr.addstr(2, 0, "Selon votre année scolaire, vous allez être assigner un jeux:")
-  stdscr.addstr(3, 0, "1e-2e année : ", curses.A_BOLD)
-  stdscr.addstr(3, 15, "PINGOUINS DU TRI", BLANC_ET_JAUNE | curses.A_BOLD)
-  stdscr.addstr(4, 0, "3e-4e année : ", curses.A_BOLD)
-  stdscr.addstr(4, 15, "ÉNIGME NATIONALE", BLANC_ET_JAUNE | curses.A_BOLD)
+  stdscr.addstr(1, 0, "Selon votre année scolaire, vous allez être assigner un jeux:")
+  stdscr.addstr(2, 0, "1e-2e année : ", curses.A_BOLD)
+  stdscr.addstr(2, 15, "PINGOUINS DU TRI", BLANC_ET_JAUNE | curses.A_BOLD)
+  stdscr.addstr(3, 0, "3e-4e année : ", curses.A_BOLD)
+  stdscr.addstr(3, 15, "ÉNIGME NATIONALE", BLANC_ET_JAUNE | curses.A_BOLD)
 
   # Explique comment démarer le programme
   stdscr.addstr(5, 0, "Cliquez sur n'importe quelle bouton pour commencer!")
