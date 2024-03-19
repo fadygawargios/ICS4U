@@ -1,11 +1,14 @@
-import pycountry
-from deep_translator import GoogleTranslator
-import curses
-from curses.textpad import Textbox
-import pygetwindow as gw
-from random import randint
+# Bibliothèques standards de Python 
+import random
 import sys
 import time
+
+# Bibliothèques «third-party»
+import curses
+from curses.textpad import Textbox
+from deep_translator import GoogleTranslator
+import pycountry
+import pygetwindow as gw
 
 # Définit la constante des trois difficultés possibles
 DIFFICULTÉS = ["Facile", "Moyenne", "Difficile"]

@@ -1,7 +1,20 @@
-from common import * 
-from PIL import Image
-from fonctions import pose_multiple, ferme_image, obtenir_options, liste_hasard, format_liste, pose_texte, merge_sort, vérifie_réponse, intro_jeu
 import time
+from PIL import Image
+from common import *
+from fonctions import (
+    ferme_image,
+    format_liste,
+    intro_jeu,
+    liste_hasard,
+    obtenir_options,
+    merge_sort,
+    pose_multiple,
+    pose_texte,
+    vérifie_réponse,
+)
+
+# Pour plus d'info sur les jeux, visité le README.md
+
 
 def énigme_nationale(stdscr, objectif, écran_retroaction):
 
@@ -67,9 +80,6 @@ def énigme_nationale(stdscr, objectif, écran_retroaction):
 
   # Retourne le nombre d'erreurs commit pour imprimer à l'écran
   return erreurs
-
-
-#  Description: Dans YYY, l'élève de la 1e à la 2e devra...
 
 def pingouins_du_tri(stdscr, objectif, écran_retroaction):
   
@@ -137,7 +147,7 @@ def pingouins_du_tri(stdscr, objectif, écran_retroaction):
     # Affiche les changements de points
     écran_retroaction.addstr(2, 0, f"Points: {points}")
     écran_retroaction.refresh()
-    
+
     # Donne du temps à l'utulisateur de voir les changements de points avant la question prochaine
     time.sleep(1.5)
 

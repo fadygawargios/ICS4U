@@ -11,11 +11,10 @@
 
 # *RAPPEL que le module curses ne fonctionnent pas dans votre line de commande, svp intaller git bash: https://git-scm.com/download/win
 
-
-from fonctions import démarrage, écran_fin
 import curses
+from common import *
 from jeux import énigme_nationale, pingouins_du_tri
-from common import * 
+from fonctions import démarrage, écran_fin
 
 # stdscr -> «Standard Screen» que Curses va afficher au dessus du line de commande
 def main(stdscr):
