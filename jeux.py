@@ -15,7 +15,6 @@ from fonctions import (
 
 # Pour plus d'info sur les jeux, visité le README.md
 
-
 def énigme_nationale(stdscr, objectif, écran_retroaction):
 
   # Salue l'utulisateur au jeu 1: Énigme Nationale et imprime l'art ASCII correspondant
@@ -77,6 +76,9 @@ def énigme_nationale(stdscr, objectif, écran_retroaction):
     # Affiche les changements de points
     écran_retroaction.addstr(1, 0, f"Points: {points}")
     écran_retroaction.refresh()
+
+    # Donne du temps à l'utulisateur de voir les changements de points avant la question prochaine
+    time.sleep(1.5)
 
   # Retourne le nombre d'erreurs commit pour imprimer à l'écran
   return erreurs

@@ -1,5 +1,5 @@
 # Bibliothèques standards de Python 
-import random
+from random import randint
 import sys
 import time
 
@@ -156,7 +156,7 @@ def démarrage(stdscr):
   stdscr.clear()
 
   # Accueille l'utilisateur par nom et explique les difficultés
-  stdscr.addstr(0, 0, f"Salut {nom}")
+  stdscr.addstr(0, 0, f"Salut {nom},")
   stdscr.addstr(2, 0, "SVP cliquer un bouton pour choisir une difficulté.")
   stdscr.addstr(3, 0, "En mode facile vous aurez besoin de 5 points, en mode moyenne, 10 points et mode difficile, 15 points pour gagner!")
   stdscr.addstr(5, 0, "ATTENTION:", curses.A_STANDOUT)
@@ -509,8 +509,8 @@ def vérifie_réponse(réponse, bonne_réponse, écran_retroaction):
     
     # Si la bonne réponse est du type liste (partie du jeu de tri)
     if type(bonne_réponse) == list:
-      # Donne l'utulisateur 5 secondes pour vérifier leur rétroaction
-      temps_rétroaction = 5
+      # Donne l'utulisateur 3 secondes pour vérifier leur rétroaction
+      temps_rétroaction = 3
       
       # Imprime la bonne réponse sans les paranthéses des listes
       bonne_réponse_str = str(bonne_réponse).strip("[]")
@@ -539,7 +539,7 @@ def vérifie_réponse(réponse, bonne_réponse, écran_retroaction):
     # Si la réponse n'est pas du type liste (partie du jeu ÉnigmeNationale)  
     else:
       # Réduit le temps de rétroaction
-      temps_rétroaction = 0.5
+      temps_rétroaction = 1
       # Imprime tout simplement la bonne réponse
       écran_retroaction.addstr(f"Mauvaise Réponse! La réponse était {bonne_réponse}.", BLANC_ET_ROUGE | curses.A_BOLD)
     
@@ -574,8 +574,8 @@ def intro_jeu(stdscr, jeu):
   if jeu == PINGOUINS_DU_TRI:
     espace = 50
     nom = "PINGOUINS DU TRI!!"
-    description_ligne_1 = "Dans ce jeu, vous allez devoir mettre des suites de"
-    description_ligne_2 = "nombres en ordre croissant et décroissant."
+    description_ligne_1 = "Dans ce jeu, vous allez devoir aider les pingouins"
+    description_ligne_2 = "a organiser leurs poissons en ordre croissant et décroissant."
 
   # Assure qu'il y aura un délai jusqu'à l'utulisateur appuie un bouton
   stdscr.nodelay(False)

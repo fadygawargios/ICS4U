@@ -1,9 +1,9 @@
 #-------------------------------------------------------------------------------
 #  Nom: Fady Gawargios
 #  Titre: Jeux Éducatif
-#  Description: Dans Énigme Nationale, l'élève de la 3e à la 4e année devra choisir 
-#  le nom d'un pays parmi trois choix à partir d'une carte mondiale ou d'un drapeau pour atteindre
-#  une certain montant de point. 
+#  Description: Ce fichier s'agit du «entry-point» dans un programme contenant deux jeux éducatif (Énigme Nationale et Pingouins du tri)
+#  choisis en fonction de l'age de l'utulisateur. Durant chaque jeu, l'utulisateur devra atteindre un objectifs de points et recevera 
+#  de la rétroaction si la réponse est mal. 
 #--------------------------------------------------------------------------------
 
 # Voir requirements.txt, un service de pipreqs (pip install pipreqs) pour installer toutes les dépendances du projet.
