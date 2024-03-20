@@ -122,14 +122,22 @@ def pingouins_du_tri(stdscr, objectif, écran_retroaction):
     réponse = pose_texte(stdscr, question)
     
     # Place les numéros des réponses des utilisateurs dans une liste sans espaces ni virgules
-    réponse_formatted = []
+    réponse_formatée = []
   
-    for nombre in réponse:
-      if nombre != "":
-        réponse_formatted.append(int(nombre.replace(",", "")))
+    # Essaie de formatter la réponse
+    try:
+      
+      for nombre in réponse:
+        if nombre != "":
+            réponse_formatée.append(int(nombre.replace(",", "")))
 
-    # Vérifie si la question à était bien réussi, sinon, donne de la rétroaction sur «écran_rétroaction»
-    résultat = vérifie_réponse(réponse_formatted, list_triée, écran_retroaction)
+      # Vérifie si la question à était bien réussi, sinon, donne de la rétroaction sur «écran_rétroaction»
+      résultat = vérifie_réponse(réponse_formatée, list_triée, écran_retroaction)
+
+    # Si l'utulisateur a inclu des lettres, il a mal répondu
+    except ValueError:
+      écran_retroaction.addstr(0, 0, "Vous ne pouvez pas inclure des lettres dans votre réponse.")
+      résultat = False
     
     # Sinon
     if résultat == False:
