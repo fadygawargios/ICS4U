@@ -1,6 +1,6 @@
 import time
 from PIL import Image
-from common import *
+import common as c
 from fonctions import (
     ferme_image,
     format_liste,
@@ -32,20 +32,20 @@ def énigme_nationale(stdscr, objectif, écran_retroaction):
     # Si le pointage est paire
     if points % 2 == 0:
       # Cherche les pays, leurs nom de fichers correspondante et la bonne response pour une question de drapeaux
-      options, option_noms_fichier, index_bonne_réponse = obtenir_options(LISTE_DRAPEAUX)
+      options, option_noms_fichier, index_bonne_réponse = obtenir_options(c.LISTE_DRAPEAUX)
       # Prépare la question
       question = f"QUESTION #{points + 1}: À quelle pays appartient ce drapeaux?"
       # Prépare le chemin de l'image de la bonne réponse
-      chemin_image = os.path.join(CHEMIN_DRAPEAUX, option_noms_fichier[index_bonne_réponse])
+      chemin_image = c.os.path.join(c.CHEMIN_DRAPEAUX, option_noms_fichier[index_bonne_réponse])
 
     # Si le pointage est impaire
     else:
       # Cherche les pays, nom de ficher, et bonne réponse pour une question de cartes
-      options, option_noms_fichier, index_bonne_réponse = obtenir_options(LISTE_CARTES)
+      options, option_noms_fichier, index_bonne_réponse = obtenir_options(c.LISTE_CARTES)
       # Prépare la question
       question = f"QUESTION #{points + 1}: Quel est le pays sur la carte?"
       # Prépare le chemin de l'image de la bonne réponse
-      chemin_image = os.path.join(CHEMIN_CARTES , option_noms_fichier[index_bonne_réponse])
+      chemin_image = c.os.path.join(c.CHEMIN_CARTES , option_noms_fichier[index_bonne_réponse])
 
     # Affiche l'image de la bonne réponse
     image = Image.open(str(chemin_image))
@@ -108,7 +108,7 @@ def pingouins_du_tri(stdscr, objectif, écran_retroaction):
       question = f"QUESTION #{points + 1}: Met la suite de nombre suivante en ordre CROISSANT: " + format_liste(liste_non_triée)
       
       # Tri la liste_non_triée avec merge_sort en ordre croissant
-      list_triée = merge_sort(liste_non_triée, croissant=True)
+      list_triée = merge_sort(liste_non_triée)
 
     # Si le pointage est impaire
     else:

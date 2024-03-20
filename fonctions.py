@@ -1,7 +1,7 @@
 # Bibliothèques standards de Python 
-from random import randint
 import sys
 import time
+from random import randint
 
 # Bibliothèques «third-party»
 import curses
@@ -341,7 +341,7 @@ def liste_hasard(longeur, min, max):
   return liste
 
 # Algorithmes de tri du type «Divide & Conquer»
-def merge_sort(liste, croissant):
+def merge_sort(liste, croissant=True):
   
   # Cas de base (s'il n'y est plus possibile de subdiviser)
   if len(liste) <= 1:

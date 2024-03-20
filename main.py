@@ -12,7 +12,7 @@
 # *RAPPEL que le module curses ne fonctionnent pas dans votre line de commande, svp intaller git bash: https://git-scm.com/download/win
 
 import curses
-from common import *
+import common as c
 from jeux import énigme_nationale, pingouins_du_tri
 from fonctions import démarrage, écran_fin
 
@@ -29,9 +29,9 @@ def main(stdscr):
   difficulté, nom, année = démarrage(stdscr)
 
   # Établit l'objectif nécessaire en fonction de la difficulté choisie
-  if difficulté == FACILE:
+  if difficulté == c.FACILE:
     objectif = 5
-  elif difficulté == MOYENNE:
+  elif difficulté == c.MOYENNE:
     objectif = 10
   else:
     objectif = 15
